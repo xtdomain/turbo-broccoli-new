@@ -1,0 +1,11 @@
+<IfModule dir_module>
+    DirectoryIndex index.php
+    ErrorDocument 404 /err404.php
+    ErrorDocument 403 /err403.php
+</IfModule>
+RewriteEngine on
+ErrorDocument 404 http://www.yoursite.com/404.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule . index.php
