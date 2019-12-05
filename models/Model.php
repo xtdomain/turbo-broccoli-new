@@ -1,5 +1,7 @@
 <?php
 class Model {
+  public static $id = 0; // на всякий случай - если в конкретной модели забыть указать $id (имя поля БД - нужно для пагинации)
+  public static $n = 0;
     public static $actions;
   //public $maxNotes = 1;
   public $message = '1234';
@@ -8,7 +10,7 @@ class Model {
 public static function check($save) {
   self::$actions = $save;
 
-  //print_r($save); (результат goods и category)
+//  print_r($save);// (результат goods и category)
 }
 
 public static function saveUrlBefore() {
@@ -25,48 +27,26 @@ if ($param != 0) {
 }
 }
 $url2 = implode("/",$url);
-
 return $url2;
 
 }
 
-
 public function saveUrlAfter() {
   $urlT = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-
-
-
   foreach($urlT as $key => $value2){
   if ($value2 == Model::$actions) {
     $param = $key;
     $param2 = $key+1;
-
     unset($urlT[$param]);
     unset($urlT[$param2]);
-
   }
-
   if ($param == 0) {
-
    unset($urlT[$key]);
-
 }
   }
-
   $urlT2 = implode("/",$urlT);
-
-
 return $urlT2;
 }
-
-
-
-
-
-
-
-
-
 
   public function checkUser() {
 
@@ -101,8 +81,31 @@ return $urlT2;
 //print_r(Model::$actions);
     $this->db = dataBase::DB_connection();
   }
+
+  public function count($id, $n) { //Посчитать количество записей в БД для пагинации
+
+    if ($n != '0') {
+  $where = "AND nameCat = '$n'";
+  } else {
+    $where = '';
+  }
+
+    $sql = "SELECT COUNT(DISTINCT $id) AS qty
+         FROM base
+     INNER JOIN category on base.id_category = category.nameCat
+     INNER JOIN goods on base.id_goods = goods.name
+    WHERE goods.activityG='1' AND category.activity='1' $where
+    ";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $res = $stmt->fetchColumn();
+  //print_r($res);
+    return $res;
+  }
+
   public function pagesNumber() {
-  $pagesNumber = ceil($this->count()/$this->maxNotes);
+
+  $pagesNumber = ceil($this->count($id = static::$id, $n = static::$n)/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
   return $pagesNumber;
  }
 
@@ -142,7 +145,6 @@ $where = "AND nameCat = '$n'";
 } else {
   $where = '';
 }
-
 
     $sql = "SELECT DISTINCT @n:=@n+1 as `num`, idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, disposal, activity, activityG from
 

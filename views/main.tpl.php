@@ -50,8 +50,13 @@ include($pageData['account']['form1']);
 </div>
 <div class="button-all">
 	<?php
-		print_r($this->pageData['save']);
-
+/*
+	echo "<div style='position: relative; margin-top: 1em; margin-bottom: 1em;'>";
+	if(isset($pageData['goods_table_view']['form1'])){
+	include($pageData['goods_table_view']['form1']);
+	echo "</div>";
+	}
+*/
 	?>
 <form class="button" name="button" action="http://catalog-site.example.ru/category/1/goods/1/" method="post">
 <button type="submit" name="button">Показывать все</button>

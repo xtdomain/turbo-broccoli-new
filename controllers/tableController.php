@@ -5,19 +5,10 @@ private $pageTpl = "/views/table_layout.tpl.php";
   public function __construct() {
     $this->model = new tableModel();
     $this->view = new View();
-
-
 }
 public function default(){
 
 $this->user_account();
-
-
-
-
-
-  $goods_table_view = $this->model->goods_table_view();
-  $this->pageData['goods_table_view'] = $goods_table_view; // Подключение вида и модели список товаров
 
   $goods_table = $this->model->goods_tables();  // Подключение таблицы товаров из БД
   $this->pageData['goods_table'] = $goods_table;
@@ -28,22 +19,12 @@ $this->user_account();
   $pagesNumber = $this->model->pagesNumber(); // Подключение пагинации
   $this->pageData['pagesNumber'] = $pagesNumber;
 
-
-
   $this->view->render($this->pageTpl, $this->pageData);
 }
 public function page(){
-
-
-
-  //$page = $this->model->page();
-  //$this->pageData['page'] = $page;
 $this->default();
 
-
 }
-
-
 
 }
  ?>

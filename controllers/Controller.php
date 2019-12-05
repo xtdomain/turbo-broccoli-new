@@ -21,24 +21,19 @@ class Controller {
 
   }
   public  function infos($save){
-  $this->model->actions=$save;
+
 
   Model::check($save);
   $this->pageData['save'] = $save; //автоматизация - url теперь будет равен наименованию контроллера
 
 //print_r($this->pageData['save']);
 
-
-
     $saveUrlBefore = $this->model->saveUrlBefore();
     $this->pageData['saveUrlBefore'] = $saveUrlBefore;
     $saveUrlAfter = $this->model->saveUrlAfter();
     $this->pageData['saveUrlAfter'] = $saveUrlAfter;
 
-
   }
-
-
 
 
 public function Contr(){

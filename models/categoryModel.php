@@ -1,16 +1,10 @@
 <?php
 class categoryModel extends Model {
+  public static $id = idCat; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
 public static $group = nameCat;
-public $maxNotes = 2;
+public $maxNotes = 1;
 
-public function account() {
-  $account = ['form1'  => 'account.tpl.php',  'form2' => 'НужноВнести'];
-  return $account;
-}
-public function goods_table_view() {
-  $goods_table = ['form1'  => 'category_layout.tpl.php',  'form2' => 'НужноВнести'];
-  return $goods_table;
-}
+
   /*public function page(){
     $url = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     foreach ($url as $key => $value) {
@@ -24,25 +18,12 @@ public function goods_table_view() {
     return $result;
   } */
 
-  public function count() {
-    $sql = "SELECT COUNT(DISTINCT category.idCat) AS qty
-         FROM base
-     INNER JOIN category on base.id_category = category.nameCat
-     INNER JOIN goods on base.id_goods = goods.name
-     WHERE category.activity='1'
-    ";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    $res = $stmt->fetchColumn();
+  //public function count($id = idCat) { //Для всех функций, в том числе пагинаци необходим подсчет элементов в БД
+//    }
 
-    return $res;
-  }
 
   public function goods_tables() {
-
-    $x = new categoryModel();
-    $x->goods_table(nameCat, 1, 0);
-    $result = $x->goods_table(nameCat, 1, 0);
+    $result = self::goods_table(nameCat, 1, 0);
 return $result;
 
   }

@@ -1,17 +1,12 @@
 <?php
 class goodsModel extends Model {
+public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
+//public static $n; //хранит имя поля группировки - для того чтобы после фильтра показывать только записи конкретной категории (+корректная пагинация)
 public static $group = name;
 public $s = name;
 public $maxNotes = 3; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
 
-public function account() {
-  $account = ['form1'  => 'account.tpl.php',  'form2' => 'НужноВнести'];
-  return $account;
-}
-public function goods_table_view() {
-  $goods_table = ['form1'  => 'goods_layout.tpl.php',  'form2' => 'НужноВнести'];
-  return $goods_table;
-}
+
   /*public function page(){
     $url = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     foreach ($url as $key => $value) {
@@ -25,42 +20,34 @@ public function goods_table_view() {
     return $result;
   } */
 
-  public function count() {
-    $sql = "SELECT COUNT(DISTINCT goods.idG) AS qty
-         FROM base
-     INNER JOIN category on base.id_category = category.nameCat
-     INNER JOIN goods on base.id_goods = goods.name
-     WHERE goods.activityG='1'
-    ";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    $res = $stmt->fetchColumn();
 
-    return $res;
-  }
 
-  public function goods_tables($m) { //$m - автоматически подставляет выбраную категорию
+  public function goods_tables($m) { //$m - автоматически подставляет выбраную категорию, $p для автоматизации: в товарах есть пагинация, но после фильтра пагинации не будет
 $m;
+self::$n = $m;
 if (empty($_POST['myForm'])) {
   $p = 1;
 } else {$p = 0;}
 
-    $x = new goodsModel();
-    $x->goods_table(name, $p, $m);
-    $result = $x->goods_table(name, $p, $m);
+
+$result = self::goods_table(name, $p, $m);
 return $result;
 
-  }
+}
 
+/*$b = 'goodsModel';
+  $x = new $b;*/
 
+public function goods_tables2() { //Дополнительный запрос в БД - нужен для 1) красивой нумерации таблиц, всегда по порядку без пропуска цифр, от единицы 2) ограничения вывода информации после фильтра
+if (empty($_POST['myForm'])) {
+  $p = 1;
+} else {$p = 0;}
 
-  public function goods_tables2() {
-    $x = new goodsModel();
-    $x->goods_table(name, 1, 0); //Для исправления ошибки
-    $result = $x->goods_table(name, 1, 0); //
-  return $result;
+ //Для исправления ошибки
+$result = self::goods_table(name, 0, 0); //
+return $result;
 
-  }
+}
 
 
 

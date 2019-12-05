@@ -10,7 +10,7 @@ class Route {
     require_once CONTROLLERS . $controllerName. ".php";
     require_once MODELS . $modelName. ".php";
     $controller = new $controllerName();
-    $g = $controller->infos($save);
+    $g = $controller->infos($save); //передать имена контроллеров в контроллер
 //print_r($controllerName);
   $controller->$action();
   }
@@ -27,7 +27,6 @@ if (empty($route[1])) {
   $controllerName = "goodsController";
   $modelName = "goodsModel";
   $action = "default";
-
   Route::startController($controllerName, $modelName, $action, $g, $save);
   $controllerName = "categoryController";
   $modelName = "categoryModel";
@@ -55,6 +54,7 @@ Route::startController($controllerName, $modelName, $action, $g, $save);
 } else {
     $action = "page";
 $save = $route[$i-1]; //сохраненить имя контроллера перед пагинацией
+
 }
 }
       $i--;

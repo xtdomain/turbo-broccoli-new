@@ -19,8 +19,6 @@ foreach($pageData['goods_table'] as $key => $value) {
 	echo "<td>" . $value['nameCat'] . "</td>";
 	echo "<tr>";
 
-
-
 }
 }
 
@@ -38,12 +36,6 @@ echo "<a href='$pageData[saveUrlBefore]/category/$i/$pageData[saveUrlAfter]'>$i<
 // для автоматизации вместо того, чтобы в каждом контроллере прописывать url (например "category") можно использовать $pageData[save] - вернет название контроллера. Пока не работает в стандартном контроллере
  } echo "</i>";
 
-
-
-
-
-
- 
 
  ?>
  </div>

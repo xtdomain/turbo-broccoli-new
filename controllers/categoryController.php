@@ -11,13 +11,6 @@ private $pageTpl = "/views/category_layout.tpl.php";
 public function default(){
 $this->user_account();
 
-
-
-
-
-  $goods_table_view = $this->model->goods_table_view();
-  $this->pageData['goods_table_view'] = $goods_table_view; // Подключение вида и модели список товаров
-
   $goods_table = $this->model->goods_tables();  // Подключение таблицы товаров из БД
   $this->pageData['goods_table'] = $goods_table;
 

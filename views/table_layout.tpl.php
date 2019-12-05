@@ -27,7 +27,7 @@ foreach($pageData['goods_table'] as $key => $value) {
 		echo "<li>";
 
 		echo "<form name='myForm' method='post' action='/goods/1'>";
-	echo "<input type='submit' name='myForm' value='$value2[nameCat]'>";
+	echo "<input type='submit' name='myForm' value='$value2[nameCat]'>";//выбор категории отправляет пост - чтобы в итоге установить фильтр товаров и убрать пагинацию
 echo "</form>";
 	echo "</li>";
 		}
