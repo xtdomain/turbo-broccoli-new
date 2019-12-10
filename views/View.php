@@ -1,7 +1,8 @@
 <?php
 class View {
-  public function render($tpl, $pageData) {
-    include ROOT. $tpl;
-    }
+  public static function render($tpl, $pageData)
+  {
+    include_once ROOT. $tpl;
+  }
 }
 ?>
