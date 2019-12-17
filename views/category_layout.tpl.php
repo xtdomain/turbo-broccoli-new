@@ -23,11 +23,8 @@
 			</tbody>
 		</table>
 		<div class="Pagination" style="padding-left: 2em; padding: 1em;">
-			<?php  echo "<i>";
-			for ($i=1; $i<=$pageData['pagesNumber']; $i++) {
-				echo "<a href='$pageData[saveUrlBefore]/category/$i/$pageData[saveUrlAfter]'>$i</a> ";
-// для автоматизации вместо того, чтобы в каждом контроллере прописывать url (например "category") можно использовать $pageData[save] - вернет название контроллера. Пока не работает в стандартном контроллере
-      }
+			<?php echo "<i>";
+			echo($pageData['pagination']);
 			echo "</i>";
 			?>
 		</div>

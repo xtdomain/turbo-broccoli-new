@@ -6,10 +6,10 @@
     <form method="post">
       <span class="input-group"><i>Введите регистрационные данные</i></span>
       <div class="input-group-user">
-        <input type="text" name="login" id="login" class="user" placeholder="Логин" required>
+        <input type="text" name="login" id="login" class="user" required placeholder="Логин" required>
       </div>
       <div class="input-group-password">
-        <input type="password" name="password" id="password" class="pass" placeholder="Пароль" required>
+        <input type="password" name="password" id="password" class="pass" required placeholder="Пароль" required>
       </div>
       <div class="input-group-checkbox">
         <input type="checkbox" name="checkbox" id="check-password" class="checkbox-pass">

@@ -9,11 +9,7 @@ class defaultModel extends Model
     return $account;
   }
 
-  public function goods_table_view()
-  {
-    $goods_table = ['form1'  => 'goods_layout.tpl.php',  'form2' => 'НужноВнести'];
-    return $goods_table;
-  }
+
 
   /*public function goods_tables()
   {

@@ -31,9 +31,7 @@
 		</table>
 		<div class="Pagination" style="padding-left: 2em; padding: 1em;">
 			<?php  echo "<i>";
-			for ($i=1; $i<=$pageData['pagesNumber']; $i++) {
-				echo "<a href='$pageData[saveUrlBefore]/goods/$i/$pageData[saveUrlAfter]'>$i</a> ";
-			}
+			echo $pageData['pagination'];			
 			echo "</i>";
 			?>
 		</div>

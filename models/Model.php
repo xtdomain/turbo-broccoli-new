@@ -1,11 +1,12 @@
 <?php
 class Model {
   public static $id = 0; // на всякий случай - если в конкретной модели забыть указать $id (имя поля БД - нужно для пагинации)
-  public static $n = 0;
+  public static $whereName = 0;
   public static $actions; //получить из роутера наименование текущего контроллера
   public static $controller;
   //public $maxNotes = 1;
-  public $message = '1234';
+  public $message = 'Войти';
+  public $error = 'Неверный логин и/или пароль';
 
   public static function saveUrlBefore()
   {
@@ -65,11 +66,11 @@ class Model {
 
   public function checkUser()
   {
-    $this->message = '$error';
+    //$this->message = '$error';
     $login = $_POST['login'];
     $password = $_POST['password'];
-    $error = 'Неверный логин и/или пароль';
-    $check = 'Данные введены верно';
+    //$error = 'Неверный логин и/или пароль';
+    //$check = 'Данные введены верно';
     $sql = "SELECT * FROM users WHERE login = :login AND password = :password";
     $stmt = $this->db->prepare($sql);
     $stmt->bindValue(":login", $login, PDO::PARAM_STR);
@@ -80,13 +81,8 @@ class Model {
     {
       $_SESSION['user'] = $_POST['login'];
       header('Location: /admin');
-      $this->message = "Привет, ". $login;
-      echo $message;
-    }
-    else
-    {
-      $this->message = $error;
-      echo $message;
+
+    } else {
       return false;
     }
   }
@@ -96,11 +92,11 @@ class Model {
     $this->db = dataBase::DB_connection();
   }
 
-  public function count($id, $n)
+  public function count($id, $whereName)
   { //Посчитать количество записей в БД для пагинации
-    if ($n != '0')
+    if ($whereName != '0')
     {
-      $where = "AND nameCat = '$n'";
+      $where = "AND nameCat = '$whereName'";
     }
     else
     {
@@ -120,12 +116,23 @@ class Model {
 
   public function pagesNumber()
   {
-    $pagesNumber = ceil($this->count($id = static::$id, $n = static::$n)/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
+    $pagesNumber = ceil($this->count($id = static::$id, $whereName = static::$whereName)/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
     return $pagesNumber;
   }
 
-  public function pageCalculate()
-  {                                                             //ОТ КАКОЙ ЦИФРЫ ПОКАЗЫВАТЬ ЗНАЧЕНИЯ БАЗЫ ДАННЫХ - ТОВАРЫ (LIMIT)
+  public function Pagination($name){
+    $massiv = [];
+    for ($i=1; $i<=$this->pagesNumber(); $i++) { //опираясь на функцию вычисления количества страниц - эта функция содержит уже готовые ссылки
+      if($this->pagesNumber() > 1) {
+        $massiv[$i] = "<a href='{$this->saveUrlBefore()}/$name/$i/{$this->saveUrlAfter()}'>$i</a>";
+      }
+    }
+    $implodeMassiv = implode(" ", $massiv); //готовая к выводу строка пагинации
+    return $implodeMassiv;
+  }
+
+  public function pageCalculate() //ОТ КАКОЙ ЦИФРЫ ПОКАЗЫВАТЬ ЗНАЧЕНИЯ БАЗЫ ДАННЫХ - ТОВАРЫ (LIMIT)
+  {
     $url = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     foreach ($url as $key => $value) {
       if ($value == Model::$actions)
@@ -147,13 +154,13 @@ class Model {
     $math = ($result-1)*$this->maxNotes;
     return $math;
   }
-  public function goods_table($s, $t, $n)
+  public function goods_table($groupName, $addLimit, $whereName) //группировка по имени или без (=str или =0), с лимитом или без (=1 или = 0), дополнительное ограничение (=str или =0)
   {
-    if ($t == 1)
+    if ($addLimit == 1)
     {
       $LIMIT = LIMIT;
-      $mathc = $this->pageCalculate(). ",";
-      $maxNotes = $this->maxNotes;
+      $mathc = $this->pageCalculate(). ","; //если включен лимит - добавляем лимит при запросе в БД, от текущей позиции
+      $maxNotes = $this->maxNotes; //количество выводимых на экран запичей при пагинации
     }
     else
     {
@@ -161,9 +168,9 @@ class Model {
       $mathc = '';
       $maxNotes = '';
     }
-    if ($n != '0')
+    if ($whereName != '0')
     {
-      $where = "AND nameCat = '$n'";
+      $where = "AND nameCat = '$whereName'";
     }
     else
     {
@@ -175,7 +182,7 @@ class Model {
     INNER JOIN category on base.id_category = category.nameCat
     INNER JOIN goods on base.id_goods = goods.name
     WHERE category.activity='1' AND goods.activityG='1' $where
-    GROUP BY $s) AS T
+    GROUP BY $groupName) AS T
     ORDER BY num
     $LIMIT $mathc $maxNotes
     ";

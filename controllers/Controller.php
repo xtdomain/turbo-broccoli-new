@@ -2,23 +2,14 @@
 class Controller {
   public $model;
   public $view;
-  public static $pageData2;
   public static $pageData = array();
-  public static function sab($h) { //не нужно
-    self::$pageData = static::$pageData;
-    return $h;
-  }
+
   public function user_account() { //Аккаунт пользователя
+    $this->pageData['error'] = $this->model->message;
+    $this->model->checkUser();
     if (!empty($_POST['login'] && $_POST['password']))
     {
-      if(!$this->login())
-      {
-        $this->pageData['error'] = $this->model->message;
-      }
-    }
-    else
-    {
-      $this->pageData['error'] = 'Войти';
+      $this->pageData['error'] = $this->model->error;
     }
   }
   public function __construct()
@@ -41,15 +32,9 @@ class Controller {
     $this->pageData['saveUrlAfter'] = $saveUrlAfter;
     $onlyTemplate = $this->model->onlyTemplate();
     $this->pageData['onlyTemplate'] = $onlyTemplate;
-    return $h;
+
   }
 
-  public function login()
-  {
-    if (!$this->model->checkUser())
-    {
-      return false;
-    }
-  }
+
 }
 ?>

@@ -52,7 +52,7 @@
 		?>
 	</div>
 	<div style="position: relative; margin-left: 1em; margin-bottom: 5em">
-		<form class="button" name="button" action="http://catalog-site.example.ru/category/1/goods/1/" method="post">
+		<form class="button" name="button" action="/category/1/goods/1/" method="post">
 			<button type="submit" name="button">Показывать все</button>
 		</form>
 	</div>
