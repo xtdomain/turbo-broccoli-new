@@ -1,5 +1,7 @@
 <?php
 class Model {
+  public static $countPage = 1;
+  public static $pagesNumber = 1;
   public static $id = 0; // на всякий случай - если в конкретной модели забыть указать $id (имя поля БД - нужно для пагинации)
   public static $whereName = 0;
   public static $actions; //получить из роутера наименование текущего контроллера
@@ -25,6 +27,7 @@ class Model {
       }
     }
     $url2 = implode("/", $url); //получаем ссылку (все что до контроллера)
+    //print_r($url2);
     return $url2;
   }
 
@@ -114,9 +117,15 @@ class Model {
     return $res;
   }
 
-  public function pagesNumber()
+  public function  pagesNumber() //количество страниц
   {
+    if ($this->maxNotes > 0) {
     $pagesNumber = ceil($this->count($id = static::$id, $whereName = static::$whereName)/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
+  }
+  else
+  {
+  Route::CallErrors(); //деление на 0
+  }
     return $pagesNumber;
   }
 
@@ -139,7 +148,12 @@ class Model {
       {
         if (is_numeric($url[$key+1]))
         {
-          $result = $url[$key+1];
+          $result = $url[$key+1]; //номер страницы текущего контроллера
+          if ($result == 0 || $result>$this->pagesNumber()) {
+            Route::CallErrors(); //страница с номером 0 или превышение количества страниц
+          }
+      static::$countPage = $result;
+
           /*if(!empty($result))
           {
             print_r($url[$key+1]);
@@ -151,11 +165,21 @@ class Model {
         }
       }
     }
-    $math = ($result-1)*$this->maxNotes;
+    $math = ($result-1)*$this->maxNotes; //(номер страницы - 1) * кол-во записей
     return $math;
   }
+
   public function goods_table($groupName, $addLimit, $whereName) //группировка по имени или без (=str или =0), с лимитом или без (=1 или = 0), дополнительное ограничение (=str или =0)
   {
+    //print_r($groupName);
+    if ($groupName !== 0) {
+      $group = 'GROUP BY';
+$group2 = $groupName;
+    }  else {
+        $group = '';$group2 = '';
+        //print_r($groupName);
+
+    }
     if ($addLimit == 1)
     {
       $LIMIT = LIMIT;
@@ -176,13 +200,13 @@ class Model {
     {
       $where = '';
     }
-    $sql = "SELECT DISTINCT @n:=@n+1 as `num`, idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, disposal, activity, activityG from
-    (select DISTINCT @n:=0, idG, name, base.idB, idCat, nameCat, base.id_category, base.id_goods, goods.short_description, goods.full_description, goods.disposal, category.activity, goods.activityG
+    $sql = "SELECT DISTINCT @n:=@n+1 as `num`, idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, quantity, disposal, activity, activityG from
+    (select DISTINCT @n:=0, idG, name, base.idB, idCat, nameCat, base.id_category, base.id_goods, goods.short_description, goods.full_description, goods.quantity, goods.disposal, category.activity, goods.activityG
     FROM base
     INNER JOIN category on base.id_category = category.nameCat
     INNER JOIN goods on base.id_goods = goods.name
     WHERE category.activity='1' AND goods.activityG='1' $where
-    GROUP BY $groupName) AS T
+    $group $group2) AS T
     ORDER BY num
     $LIMIT $mathc $maxNotes
     ";

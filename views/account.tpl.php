@@ -1,5 +1,5 @@
 <div class="logo-form" style="padding-left: 1em;text-align:left; position: fixed; left: 0em; top: 0em; right: 0em; background:#99CCFF; height: 3em; z-index: 2">
-  <p><a href="/"><img src="img/logo1.png" class="logotip" alt="Logo-Company"></p></a>
+  <p><a href="<?php echo "/" . Route::$templateName; ?>"><img src="img/logo1.png" class="logotip" alt="Logo-Company"></p></a>
 </div>
 <div id="logo">
   <div class="account-form" style="z-index: 2">

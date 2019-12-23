@@ -1,3 +1,4 @@
+<?php $content->startRoute('admin') ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,13 +46,13 @@
 	}
 	?>
 	</header>
-<div class="logo-form" style="padding-left: 1em;text-align:left; position: relative; left: 0em; margin-top: 5em; right: 0em; z-index: 1">
+<div class="logo-form" style="padding-left: 1em;text-align:left; position: relative; left: 0em; margin-top: 5em; right: 0em; ">
 	<h1 style="text-align:center">Администрирование</h1>
 </div>
-<div style="position: relative; margin-left: 2em; margin-bottom: 1em">
+<div style="position: relative; margin-left: 2em; margin-right: 2em; margin-bottom: 1em">
 	<?php
-	$content = new Route();
-	$content->addRoute('admin');
+
+	$content->addRoute();
 	?>
 </div>
 <div style="position:relative">

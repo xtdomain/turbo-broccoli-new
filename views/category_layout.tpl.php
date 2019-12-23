@@ -1,4 +1,4 @@
-<div class="site-table" style="padding-left: 1em;text-align:left; position: relative; left: 0em;   right: 0em; background:#FFFFFF;  z-index: 1;">
+<div class="site-table" style="padding-left: 1em;text-align:left; position: relative; left: 0em;   right: 0em; background:#FFFFFF;  ">
 	<div align="left" class="table-category" style="position: relative; padding: 2em; width:45%;">
 		<h3 style="text-align:center">Категории</h3>
     <table  border="1" width="100%" cellpadding="5">

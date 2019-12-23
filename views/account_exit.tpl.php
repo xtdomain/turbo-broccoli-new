@@ -1,6 +1,6 @@
 <div class="logo-form" style="padding-left: 1em;text-align:left; position: absolute; left: 0em; top: 0em; right: 0em; background:#FFCCCC; height: 3em; z-index: 2;animation: 1s ease slideInFromLeft">
   <div id="logo">
-    <p><img src="img/logo1.png" class="logotip" alt="Logo-Company"></p>
+    <p><a href="<?php echo "/" . Route::$templateName; ?>"><img src="img/logo1.png" class="logotip" alt="Logo-Company"></p></a>
   </div>
 
 <div class="account-form" style="z-index: 2;">

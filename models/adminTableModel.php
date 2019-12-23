@@ -1,6 +1,6 @@
 <?php
-class goodsModel extends Model {
-  public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
+class adminTableModel extends Model {
+  public static $id = idB; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
 //public static $whereName; //хранит имя поля группировки - для того чтобы после фильтра показывать только записи конкретной категории (+корректная пагинация)
   public $maxNotes = 3; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
 
@@ -15,11 +15,11 @@ class goodsModel extends Model {
     {
       $p = 0;
     }
-    $result = self::goods_table(name, $p, $m);
+    $result = self::goods_table(0, 1, 0);
     return $result;
   }
 
-  public function goods_tables2() //Дополнительный запрос в БД - нужен для 1) красивой нумерации таблиц, всегда по порядку без пропуска цифр, от единицы 2) ограничения вывода информации после фильтра
+/*  public function goods_tables2() //Дополнительный запрос в БД - нужен для 1) красивой нумерации таблиц, всегда по порядку без пропуска цифр, от единицы 2) ограничения вывода информации после фильтра
   {
     if (empty($_POST['myForm']))
     {
@@ -32,5 +32,6 @@ class goodsModel extends Model {
     $result = self::goods_table(name, 0, 0);
     return $result;
   }
+  */
 }
 ?>

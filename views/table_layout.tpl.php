@@ -1,4 +1,4 @@
-<div class="site-table" style="padding-left: 1em;text-align:left; position: relative; left: 0em; right: 0em; background:#FFFFFF;  z-index: 1;">
+<div class="site-table" style="padding-left: 1em;text-align:left; position: relative; left: 0em; right: 0em; background:#FFFFFF;  ">
 	<div class="table-category" style="padding: 2em;">
 		<table border="1" width="95%" cellpadding="5">
 			<thead>

@@ -1,8 +1,10 @@
+<?php $content->startRoute('default') ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="vieport" content="width=device-width, initial-scale=1">
+	<link href="/style/style.css" rel="stylesheet">
 	<title><?php echo $pageData['title'];?></title>
 	<style>
 	.account-form {
@@ -42,22 +44,21 @@
 	}
 	?>
 	</header>
-	<div class="logo-form" style="padding-left: 1em;text-align:left; position: relative; left: 0em; margin-top: 5em; right: 0em; z-index: 1">
+	<div class="logo-form" style="padding-left: 1em;text-align:left; position: relative; left: 0em; margin-top: 5em; right: 0em; ">
 		<h1 style="text-align:center">Магазин электроники</h1>
 	</div>
-	<div style="position: relative; margin-left: 2em; margin-bottom: 1em">
+	<div style="position: relative; margin-left: 2em; margin-right: 2em; margin-bottom: 1em">
 		<?php
-		$content = new Route();
-		$content->addRoute('default');
+		$content->addRoute();
 		?>
 	</div>
 	<div style="position: relative; margin-left: 1em; margin-bottom: 5em">
-		<form class="button" name="button" action="/category/1/goods/1/" method="post">
+		<form class="button" name="button" action="/category/1/goods/1" method="post">
 			<button type="submit" name="button">Показывать все</button>
 		</form>
 	</div>
 	<footer>
-		<div class="footer" style="padding-right: 1em;text-align:right; position: fixed; left: 0em; bottom: 0em; right: 0em; background:#D3D3D3; height: 3em; z-index: 2">
+		<div class="footer" style="padding-right: 1em;text-align:right; position: fixed; left: 0em; bottom: 0em; right: 0em; background:#D3D3D3; height: 3em; ">
 			<p>Официальный магазин электроники</p>
 		</div>
 	</footer>
