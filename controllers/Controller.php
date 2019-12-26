@@ -4,6 +4,8 @@ class Controller {
   public $view;
   public static $pageData = array();
 
+
+
   public function user_account() { //Аккаунт пользователя
     $this->pageData['error'] = $this->model->message;
     $this->model->checkUser();
@@ -17,7 +19,11 @@ class Controller {
     $this->model = new Model();
     $this->view = new View();
   }
+  public function printArrays($massiv) {
+$printArray = $this->model->printArray($massiv);
+return $printArray;
 
+}
   public function infos($save, $g)
   {
     //print_r($save);

@@ -15,6 +15,12 @@ class categoryController extends Controller {
     $pagination = $this->model->Pagination('category'); // Подключение пагинации
     $this->pageData['pagination'] = $pagination;
 
+    $printTable = $this->printArrays($this->model->printTable()); //вывод информации в табличном виде
+    $this->pageData['printTable'] = $printTable;
+
+    $printDiv = $this->printArrays($this->model->printDiv()); //вывод информации в блочном виде
+    $this->pageData['printDiv'] = $printDiv;
+
     $this->view->render($this->pageTpl, $this->pageData);
   }
 

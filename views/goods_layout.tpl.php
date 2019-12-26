@@ -1,39 +1,16 @@
-<div class="site-table" style="padding-left: 1em;text-align:left; position: relative; left: 0em; right: 0em; background:#FFFFFF;  ">
-	<div align="left" class="table-category" style="position: relative; padding: 2em; width:45%; ">
-		<h3 style="text-align:center">Товары</h3>
-		<table  border="1" width="100%" cellpadding="5">
-			<thead>
-				<tr>
-					<th>Номер</th>
-					<th>Название товара</th>
-				</tr>
-			</thead>
-      <tbody>
-				<?php
-				if(!empty($pageData['goods_table']))
-				{
-					foreach($pageData['goods_table'] as $key => $value)
-					{
-						echo "<tr>";
-						echo "<td>" . $value['num'] . "</td>";
-						foreach($pageData['goods_table2'] as $key => $value2) if ($value['name'] == $value2['name']) {
-							echo "<td><a href='$pageData[onlyTemplate]/table/$value2[num]'>" . $value['name'] . "</a></td>"; /////////////////////////////////проверить на наличие ошибок - несколько категорий в списке товаров
-						}
-						echo "<tr>";
-					}
-				} /*else {
-	http_response_code(404);
-	include('my_404.php');
-	die();
-}*/
-        ?>
-      </tbody>
-		</table>
-		<div class="Pagination" style="padding-left: 2em; padding: 1em;">
-			<?php  echo "<i>";
-			echo $pageData['pagination'];
-			echo "</i>";
-			?>
-		</div>
-	</div>
+<div align="left" class="standart-table" >
+	<h3 style="text-align:center">Товары</h3>
+	<hr class="group_linie">
+	<?php
+	echo($pageData['printDiv']);
+	?>
+	<div class="pagination">
+		<?php
+		echo $pageData['pagination'];
+		?>
+</div>
+
+
+
+	<hr class="group_linie">
 </div>

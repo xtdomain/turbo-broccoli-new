@@ -1,43 +1,16 @@
-<?php $content->startRoute('admin') ?>
+<?php
+$content->startRoute('admin')
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title><?php echo $pageData['title']; ?></title>
 	<meta name="vieport" content="width=device-width, initial-scale=1">
-	<style>
-	@keyframes slideInFromLeft
-	{
-		0%
-		{
-			background:#99CCFF;
-			border-color: #99CCFF;
-		}
-	  100%
-		{
-	    background:#FFCCCC;
-			border-color: #FFCCCC;
-	  }
-	}
-	.account-form {
-		width: 250px; border: 4px double #FFCCCC; padding: 1em 1em 2em; text-align:center; position: absolute; right: 1em; top: -5em; background:#FFCCCC; transition-duration: 1s; transition-delay: 2s; animation: 1s ease slideInFromLeft;
-	}
-	.account-form {
-	}
-	.account-form:hover {
-		border: 4px double #8B0000; border-radius: 0em 0em 0em 2em ;padding: 1em 1em 2em; text-align:center; position: absolute; right: 1em; top: 0em; background:#DEB887; transition: .3s;
-	}
-	.for-submit {
-		padding-top: 1em;
-		padding-bottom: 0em;
-	}
-	.info {
-		padding-top: 0.0em;
-		margin-bottom: -2.4em;
-	}
-	</style>
+	<link href="/style/style_admin.css" rel="stylesheet">
+
 </head>
-<body>
+<body style="background-color:#FFF8F0">
 	<header>
 	<?php
 	if (isset($pageData['account']['form1']))

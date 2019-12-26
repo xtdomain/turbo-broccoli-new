@@ -11,8 +11,9 @@ class adminTableController extends Controller {
   public function default()
   {
 
-    $pagesNum = $this->model->pagesNumber();
-    $this->pageData['pagesNumber'] = $pagesNum;
+
+
+
 
     if (!empty($_POST['myForm']))
     {
@@ -36,6 +37,13 @@ class adminTableController extends Controller {
     $pagination = $this->model->Pagination('admintable'); // Подключение пагинации (после выбора категории пагинацию не отображать)
     $this->pageData['pagination'] = $pagination;
 }
+
+$printTable = $this->printArrays($this->model->printTable()); //вывод информации в табличном виде
+$this->pageData['printTable'] = $printTable;
+
+$printDiv = $this->printArrays($this->model->printDiv()); //вывод информации в блочном виде
+$this->pageData['printDiv'] = $printDiv;
+
 
     $this->view->render($this->pageTpl, $this->pageData);
   }

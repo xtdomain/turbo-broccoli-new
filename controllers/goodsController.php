@@ -24,14 +24,16 @@ class goodsController extends Controller {
     $goods_table2 = $this->model->goods_tables2();  // Подключение таблицы товаров из БД
     $this->pageData['goods_table2'] = $goods_table2;
 
-
-
-
     if (empty($_POST['myForm']))
     {
     $pagination = $this->model->Pagination('goods'); // Подключение пагинации (после выбора категории пагинацию не отображать)
     $this->pageData['pagination'] = $pagination;
 }
+    $printTable = $this->printArrays($this->model->printTable()); //вывод информации в табличном виде
+    $this->pageData['printTable'] = $printTable;
+
+    $printDiv = $this->printArrays($this->model->printDiv()); //вывод информации в блочном виде
+    $this->pageData['printDiv'] = $printDiv;
 
     $this->view->render($this->pageTpl, $this->pageData);
   }

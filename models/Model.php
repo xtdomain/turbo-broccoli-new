@@ -6,9 +6,17 @@ class Model {
   public static $whereName = 0;
   public static $actions; //получить из роутера наименование текущего контроллера
   public static $controller;
+
   //public $maxNotes = 1;
   public $message = 'Войти';
   public $error = 'Неверный логин и/или пароль';
+
+  public function printArray($massiv) { //вывести массив в строку
+    if (!empty($massiv)) {
+      $implodeMassiv = implode(" ", $massiv);
+      return $implodeMassiv;
+    }
+  }
 
   public static function saveUrlBefore()
   {
@@ -126,14 +134,25 @@ class Model {
   {
   Route::CallErrors(); //деление на 0
   }
+
     return $pagesNumber;
   }
 
-  public function Pagination($name){
+  public function Pagination($name)
+  {
     $massiv = [];
-    for ($i=1; $i<=$this->pagesNumber(); $i++) { //опираясь на функцию вычисления количества страниц - эта функция содержит уже готовые ссылки
-      if($this->pagesNumber() > 1) {
-        $massiv[$i] = "<a href='{$this->saveUrlBefore()}/$name/$i/{$this->saveUrlAfter()}'>$i</a>";
+    for ($i=1; $i<=$this->pagesNumber(); $i++) //опираясь на функцию вычисления количества страниц - эта функция содержит уже готовые ссылки
+    {
+      if($this->pagesNumber() > 1)
+      {
+        $color = 'black';
+        $background = '#D3D3D3';
+        $activate = 'auto';
+        if ($i == static::$countPage)
+        {
+          $color = '#8B0000'; $background = '#DEB887'; $activate = 'none';
+        }
+        $massiv[$i] = "<div class='paginationPhp' style='pointer-events:$activate;'><a href='{$this->saveUrlBefore()}/$name/$i/{$this->saveUrlAfter()}' class='a_paginationPhp' style='color: $color; background: $background; '>$i</a></div>";
       }
     }
     $implodeMassiv = implode(" ", $massiv); //готовая к выводу строка пагинации
@@ -143,21 +162,18 @@ class Model {
   public function pageCalculate() //ОТ КАКОЙ ЦИФРЫ ПОКАЗЫВАТЬ ЗНАЧЕНИЯ БАЗЫ ДАННЫХ - ТОВАРЫ (LIMIT)
   {
     $url = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    foreach ($url as $key => $value) {
+    foreach ($url as $key => $value)
+    {
       if ($value == Model::$actions)
       {
         if (is_numeric($url[$key+1]))
         {
           $result = $url[$key+1]; //номер страницы текущего контроллера
-          if ($result == 0 || $result>$this->pagesNumber()) {
+          if ($result == 0 || $result>$this->pagesNumber())
+          {
             Route::CallErrors(); //страница с номером 0 или превышение количества страниц
           }
-      static::$countPage = $result;
-
-          /*if(!empty($result))
-          {
-            print_r($url[$key+1]);
-          }*/
+          static::$countPage = $result;
         }
         else
         {
@@ -174,7 +190,7 @@ class Model {
     //print_r($groupName);
     if ($groupName !== 0) {
       $group = 'GROUP BY';
-$group2 = $groupName;
+      $group2 = $groupName;
     }  else {
         $group = '';$group2 = '';
         //print_r($groupName);
