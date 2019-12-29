@@ -6,6 +6,8 @@ class goodsController extends Controller {
   {
     $this->model = new goodsModel();
     $this->view = new View();
+
+
   }
 
   public function default()
@@ -35,11 +37,15 @@ class goodsController extends Controller {
     $printDiv = $this->printArrays($this->model->printDiv()); //вывод информации в блочном виде
     $this->pageData['printDiv'] = $printDiv;
 
-    $this->view->render($this->pageTpl, $this->pageData);
+
+$this->view->render($this->pageTpl, $this->pageData);
   }
 
   public function page(){
     $this->default();
+  }
+  public function g(){
+
   }
 }
 ?>

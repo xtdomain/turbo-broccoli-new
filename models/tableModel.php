@@ -51,7 +51,7 @@ self::$result = $result;
             {
               $massiv[$key] .= "
               <li>
-                <form name='myForm' method='post' action='$pageData[saveUrlBefore]/goods/1/$pageData[saveUrlAfter]'>
+                <form name='myForm' method='post' action='{$this->onlyTemplate()}/goods/1'>
                   <input type='submit' name='myForm' value='$value2[nameCat]'>
                 </form>
               </li>";
@@ -76,15 +76,8 @@ self::$result = $result;
       ";
     return $massiv;
   }
-
-
-
-
-
-
-
-
-
+/*$pageData[saveUrlBefore]/goods/1/$pageData[saveUrlAfter] - старый метод некорректный, тк pagedata вызывается только в видах, и не нужно сохранять весь путь при фильтрации данных*/
+/*{$this->onlyTemplate()}/goods/1 - новый метод*/
   public function printDiv()
   {
 
@@ -101,7 +94,7 @@ self::$result = $result;
             {
               $massiv[$key] .= "
 
-                <form name='myForm' method='post' action='$pageData[saveUrlBefore]/goods/1/$pageData[saveUrlAfter]'>
+                <form name='myForm' method='post' action='{$this->onlyTemplate()}/goods/1'>
                   <input type='submit' name='myForm' value='$value2[nameCat]'>
                 </form>
               ";
@@ -120,10 +113,6 @@ self::$result = $result;
         </div>
         ";
       }
-
-
-
-
     return $massiv;
   }
 }

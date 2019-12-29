@@ -1,5 +1,6 @@
 <?php
-$content->startRoute('admin')
+$content->startRoute('admin');
+$content->addRoute();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +26,8 @@ $content->startRoute('admin')
 <div style="position: relative; margin-left: 2em; margin-right: 2em; margin-bottom: 1em">
 	<?php
 
-	$content->addRoute();
+	self::render2();
+
 	?>
 </div>
 <div style="position:relative">

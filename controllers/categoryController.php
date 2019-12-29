@@ -5,6 +5,7 @@ class categoryController extends Controller {
   {
     $this->model = new categoryModel();
     $this->view = new View();
+  
   }
 
   public function default()
@@ -21,7 +22,9 @@ class categoryController extends Controller {
     $printDiv = $this->printArrays($this->model->printDiv()); //вывод информации в блочном виде
     $this->pageData['printDiv'] = $printDiv;
 
+
     $this->view->render($this->pageTpl, $this->pageData);
+
   }
 
   public function page()

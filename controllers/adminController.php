@@ -20,11 +20,6 @@ class adminController extends Controller{
     View::render($this->pageTpl, $this->pageData);
   }
 
-  public function page()
-  {
-    $this->default();
-  }
-
   public static function out()
   {
     session_destroy();

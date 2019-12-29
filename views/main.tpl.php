@@ -1,5 +1,7 @@
 <?php
 $content->startRoute('default');
+$content->addRoute();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +26,9 @@ $content->startRoute('default');
 	</div>
 	<div class="content" >
 		<?php
-		$content->addRoute();
+
+   self::render2();
+
 		?>
 	</div>
 	<div class="buttonShowAll" >

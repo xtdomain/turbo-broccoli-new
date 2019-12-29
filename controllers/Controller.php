@@ -18,8 +18,10 @@ class Controller {
   {
     $this->model = new Model();
     $this->view = new View();
+  //print_r(static::$pageData);
   }
   public function printArrays($massiv) {
+//print_r($this->pageData);
 $printArray = $this->model->printArray($massiv);
 return $printArray;
 

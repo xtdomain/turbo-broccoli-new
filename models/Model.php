@@ -11,7 +11,7 @@ class Model {
   public $message = 'Войти';
   public $error = 'Неверный логин и/или пароль';
 
-  public function printArray($massiv) { //вывести массив в строку
+  public static function printArray($massiv) { //вывести массив в строку
     if (!empty($massiv)) {
       $implodeMassiv = implode(" ", $massiv);
       return $implodeMassiv;
@@ -59,19 +59,27 @@ class Model {
   {
     $urlT = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     foreach ($urlT as $key => $value2) {
+
       if ($value2 == Model::$actions)
       {
         $param = $key;
+
         $param2 = $key+1;
         unset($urlT[$param]);
         unset($urlT[$param2]);
       }
+
       if ($param == 0)
       {
         unset($urlT[$key]);
+
       }
     }
+
+array_unshift($urlT, "");
+
     $urlT2 = implode("/",$urlT);
+
     return $urlT2;
   }
 
@@ -151,8 +159,8 @@ class Model {
         if ($i == static::$countPage)
         {
           $color = '#8B0000'; $background = '#DEB887'; $activate = 'none';
-        }
-        $massiv[$i] = "<div class='paginationPhp' style='pointer-events:$activate;'><a href='{$this->saveUrlBefore()}/$name/$i/{$this->saveUrlAfter()}' class='a_paginationPhp' style='color: $color; background: $background; '>$i</a></div>";
+        } //$i(здесь предполагается символ /){$this->saveUrlAfter()} - символ / проставляется в методе ранее если требуется
+        $massiv[$i] = "<div class='paginationPhp' style='pointer-events:$activate;'><a href='{$this->saveUrlBefore()}/$name/$i{$this->saveUrlAfter()}' class='a_paginationPhp' style='color: $color; background: $background; '>$i</a></div>";
       }
     }
     $implodeMassiv = implode(" ", $massiv); //готовая к выводу строка пагинации
