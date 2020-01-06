@@ -1,13 +1,13 @@
-<div align="left" class="admin-table">
+<div style="	padding-top: 2em; padding-bottom: 2em;">
 	<h3 style="text-align:center">Таблица связей</h3>
-	<hr class="group_linie">
-	<?php
-	echo($pageData['printDiv']);
-	?>
-	<div class="pagination">
+	<div align="left" class="admin-table">
 		<?php
-		echo	$pageData['pagination'];
+		echo $pageData['printDiv'];
 		?>
 	</div>
-	<hr class="group_linie">
+	<div class="pagination">
+		<?php
+		echo $pageData['pagination'];
+		?>
+	</div>
 </div>

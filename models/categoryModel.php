@@ -28,7 +28,7 @@ class categoryModel extends Model {
           <tr>
           <td>{$value['num']}</td>
           <td>{$value['nameCat']}</td>
-          <tr>";
+          </tr>";
         }
         $massiv[$key] .= "
         </tbody>
@@ -39,6 +39,7 @@ class categoryModel extends Model {
 
   public function printDiv()
   {
+    $massiv = [];
     foreach(static::$result as $key => $value)
     {
 

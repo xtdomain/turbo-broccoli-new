@@ -84,6 +84,8 @@ self::$result = $result;
       foreach(static::$result as $key => $value)
       {
         $massiv[$key] = "
+        <div>
+        <hr class='group_linie'>
         <div class='DivVisual'>
           <h1 align='center'>Номер: $value[num]</h1>
           <hr>
@@ -111,6 +113,8 @@ self::$result = $result;
           }
           $massiv[$key] .=  "
         </div>
+          <hr class='group_linie'>
+          </div>
         ";
       }
     return $massiv;

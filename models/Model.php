@@ -111,7 +111,7 @@ array_unshift($urlT, "");
     $this->db = dataBase::DB_connection();
   }
 
-  public function count($id, $whereName)
+  public function count($id, $whereName, $limit = "WHERE goods.activityG='1' AND category.activity='1'") //стандартно записи лимитированы по активности
   { //Посчитать количество записей в БД для пагинации
     if ($whereName != '0')
     {
@@ -125,7 +125,7 @@ array_unshift($urlT, "");
     FROM base
     INNER JOIN category on base.id_category = category.nameCat
     INNER JOIN goods on base.id_goods = goods.name
-    WHERE goods.activityG='1' AND category.activity='1' $where
+ $limit $where
     ";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
@@ -216,20 +216,26 @@ array_unshift($urlT, "");
       $mathc = '';
       $maxNotes = '';
     }
-    if ($whereName != '0')
+
+    if ($whereName === 'ALL')
+    {
+      $where = "OR category.activity='1' OR category.activity='0' OR goods.activityG='1' OR goods.activityG='0'";
+    }
+
+    else if ($whereName != '0')
     {
       $where = "AND nameCat = '$whereName'";
     }
     else
     {
-      $where = '';
+      $where = "";
     }
     $sql = "SELECT DISTINCT @n:=@n+1 as `num`, idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, quantity, disposal, activity, activityG from
     (select DISTINCT @n:=0, idG, name, base.idB, idCat, nameCat, base.id_category, base.id_goods, goods.short_description, goods.full_description, goods.quantity, goods.disposal, category.activity, goods.activityG
     FROM base
     INNER JOIN category on base.id_category = category.nameCat
     INNER JOIN goods on base.id_goods = goods.name
-    WHERE category.activity='1' AND goods.activityG='1' $where
+  WHERE category.activity='1' AND goods.activityG='1' $where
     $group $group2) AS T
     ORDER BY num
     $LIMIT $mathc $maxNotes
@@ -241,6 +247,20 @@ array_unshift($urlT, "");
       $result[$row['idB']] = $row;
     }
     return $result;
+  }
+
+  public function goods_simple_table($table, $columnId = '', $column2 = '') //построение простого запроса
+  {
+    $sql = "SELECT $columnId, $column2
+    FROM $table
+    ";
+    $result = array();
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $result[$row[$columnId]] = $row;
+    }
+return $result;
   }
 }
 ?>

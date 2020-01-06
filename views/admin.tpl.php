@@ -12,35 +12,37 @@ $content->addRoute();
 
 </head>
 <body style="background-color:#FFF8F0">
-	<header>
-	<?php
-	if (isset($pageData['account']['form1']))
-	{
-		include_once($pageData['account']['form1']);
-	}
-	?>
+	<header style="position: fixed; top: 0em; right: 0em; background:#FFCCCC; height: 3em; width: 100%; z-index: 2; animation: 1s ease slideInFromLeft; ">
 	</header>
-<div class="logo-form" style="padding-left: 1em;text-align:left; position: relative; left: 0em; margin-top: 5em; right: 0em; ">
-	<h1 style="text-align:center">Администрирование</h1>
-</div>
-<div style="position: relative; margin-left: 2em; margin-right: 2em; margin-bottom: 1em">
-	<?php
-
-	self::render2();
-
-	?>
-</div>
-<div style="position:relative">
-	<?php
-//if(isset($pageData['tables']['table-admin'])){
-//include($pageData['tables']['table-admin']);
-//}
-	?>
-</div>
-<footer>
-	<div class="footer" style="padding-right: 1em;text-align:right; position: fixed; left: 0em; bottom: 0em; right: 0em; background:#D3D3D3; height: 3em">
-		<p>Официальный магазин электроники</p>
+	<div class="flexContainer">
+		<div class="logoCompany">
+			<div class="" style="position: fixed; z-index: 2; margin-top: -10px; ">
+				<p><a href="<?php echo "/" . Route::$templateName; ?>"><img src="img/logo1.png" class="logotip" alt="Logo-Company"></p></a>
+			</div>
+		</div>
+		<div class="content" style="">
+			<div class="logo-name" style="padding-left: 1em; position: relative; left: 0em; margin-top: 5em; right: 0em; ">
+				<h1 style="text-align:center">Администрирование</h1>
+			</div>
+			<div class="content"  >
+				<?php
+				self::render2();
+				?>
+			</div>
+		</div>
+		<div class="accountExit" >
+			<?php
+			if (isset($pageData['account']['form1']))
+			{
+				include($pageData['account']['form1']);
+			}
+			?>
+		</div>
 	</div>
-</footer>
+	<footer>
+		<div class="footer" style="padding-right: 1em;text-align:right; position: fixed; left: 0em; bottom: 0em; right: 0em; background:#D3D3D3; height: 3em">
+			<p>Официальный магазин электроники</p>
+		</div>
+	</footer>
 </body>
 </html>

@@ -13,11 +13,11 @@
 }
 .account-form 
 {
-	width: 250px; 
+	width: 150px; 
 	border: 4px double #FFCCCC; 
 	padding: 1em 1em 2em; 
 	text-align:center; 
-	position: absolute; 
+	position: relative; 
 	right: 1em; 
 	top: -5em; 
 	background:#FFCCCC; 
@@ -31,13 +31,14 @@
 	border-radius: 0em 0em 0em 2em;
 	padding: 1em 1em 2em; 
 	text-align:center; 
-	position: absolute; 
+	position: relative; 
 	right: 1em; top: 0em; 
 	background:#DEB887; 
 	transition: .3s;
 }
 .for-submit 
 {
+
 	padding-top: 1em;
 	padding-bottom: 0em;
 }
@@ -49,16 +50,57 @@
 .logo-name 
 {
 	text-align:center; 
-	position: relative; 
+	position: absolute; 
 	margin-top: 5em;
+}
+.logo-out-form 
+{
+
+
+padding-left: 4em; text-align:left; position: absolute; left: 0em; top: 0em; right: 0em; background:#FFCCCC; height: 3em; z-index: 2;animation: 1s ease slideInFromLeft;
 }
 .content 
 {
-	position: relative;
-	margin-left: 2em; 
-	margin-right: 2em; 
-	padding-bottom: 2em; 	
+
+ 	display: flex;
+	flex-flow: column wrap;
+  	align-items: center;
+  	justify-content: center;
 }
+.flexContainer 
+{
+
+  	display: flex;
+	flex-flow: row nowrap;
+  	align-items: flex-start;
+  	justify-content: center;
+}
+
+.logoCompany
+{
+width:200px;
+margin-left: 38px;
+margin-right: 38px;
+
+  	display: flex;
+	flex-flow: row nowrap;
+  	align-items: flex-start;
+  	justify-content: flex-end;
+}
+
+.accountExit
+{
+padding-right: 40px;
+width:200px;
+  	display: flex;
+	flex-flow: row nowrap;
+  	align-items: flex-start;
+  	justify-content: flex-start;
+}
+
+
+
+
 .buttonShowAll 
 {
 	position: relative; 
@@ -95,7 +137,6 @@ footer
 	border-radius: 20px;
 	margin-top: 10px; margin-right: 10px;
 	overflow-x:hidden;
-	float:left;
 	border: 4px double black; 
 	box-shadow: 0 0 20px rgba(0,0,0,1);
 }
@@ -116,7 +157,12 @@ footer
 }
 .pagination 
 {
-	padding-left: 2em; padding-left: 1em; clear: left;
+	display: flex;
+	flex-flow: row wrap;
+  	align-items: center;
+  	justify-content: flex-start;
+	position: relative; 
+	padding-left: 1em; clear: left;
 }
 
 .paginationPhp 
@@ -146,23 +192,53 @@ footer
 }
 .standart-table 
 {
+		min-width: 500px;
+	max-width: 900px;
+ 	display: flex;
+	flex-flow: row wrap;
+  	align-items: center;
+  	justify-content: flex-start;
 	position: relative; 
-	padding-top: 2em; 
-	padding-bottom: 0em; 
-	width:100%; 
-	margin-bottom: 0em;  
-	clear: left; 
-	padding-bottom: 2em;  
+
 }
 .admin-table 
 {
+	min-width: 500px;
+	max-width: 900px;
+ 	display: flex;
+	flex-flow: row wrap;
+  	align-items: center;
+  	justify-content: flex-start;
 	position: relative; 
-	padding-top: 2em; 
-	padding-bottom: 0em;  
-	width:100%; 
-	margin-bottom: 0em;  
-	clear: left; 
-	padding-bottom: 2em;  
+}
+@media (max-width: 1428px){
+
+.admin-table 
+{
+justify-content: center;
+}
+
+
+.pagination
+{
+	justify-content: center;
+
+}
+
+}
+
+@media (max-width: 1428px)
+{
+	.logoCompany
+	{
+		margin-right: -70px;
+		justify-content: flex-start;
+	}
+	.accountExit
+	{
+		margin-right: -70px;
+		justify-content: flex-end;
+	}
 }
 .category_name_color 
 {
@@ -175,6 +251,13 @@ footer
 }
 .group_linie 
 {
+	padding-bottom: 0em;
+	display: flex;
+	flex-flow: row nowrap;
+  	align-items: flex-start;
+  	justify-content: flex-start;
+	width: 440px;
+	top: 0em;
 	box-shadow: 0 0 5px rgba(139,0,0,1);
 	height: 1px;
 	border: 0;
