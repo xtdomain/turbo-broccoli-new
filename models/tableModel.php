@@ -92,7 +92,7 @@ self::$result = $result;
           <p>Название товара: <b class='category_name_color'>$value[name]</b></p>
           <p>Название категории: </p>
           ";
-            foreach(static::$result2 as $key => $value2) if ($value['name'] == $value2['name'])
+            foreach(static::$result2 as $key2 => $value2) if ($value['name'] == $value2['name'])
             {
               $massiv[$key] .= "
 

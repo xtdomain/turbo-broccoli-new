@@ -236,9 +236,15 @@ Route::CallErrors(); //деление на 0
   //print_r($one);
     $db = dataBase::DB_connection();
 
-    $sql = "INSERT INTO `goods`(`idG`, `name`, `activityG`, `short_description`, `full_description`, `quantity`, `disposal`) VALUES (@idG:=:nameidG_bind, @new:=:nameG_bind, @act:=:nameActG_bind, @sd:=:nameShDisc_bind, @fd:=:nameFlDisc_bind, @quant:=:nameQuant_bind, @disp:=:nameDisp_bind);
-    INSERT INTO `category`(`idCat`, `nameCat`, `activity`) VALUES (@idCat:=:nameidCat_bind, @newC:=:name_bind, @Act:=:nameAct_bind);
-    INSERT INTO `base`(`idB`, `id_category`, `id_goods`) VALUES (@idBase:=:id_bind, @newC, @new);";
+    $sql = "INSERT INTO `goods`(`idG`, `name`, `activityG`, `short_description`, `full_description`, `quantity`, `disposal`)
+    VALUES (@idG:=:nameidG_bind, @new:=:nameG_bind, @act:=:nameActG_bind, @sd:=:nameShDisc_bind, @fd:=:nameFlDisc_bind, @quant:=:nameQuant_bind, @disp:=:nameDisp_bind)
+    ON DUPLICATE KEY UPDATE `idG`=`idG`, `name`=`name`, `activityG`:=:nameActG_bind, `short_description`:=:nameShDisc_bind, `full_description`:=:nameFlDisc_bind, `quantity`:=:nameQuant_bind, `disposal`:=:nameDisp_bind;
+
+    INSERT INTO `category`(`idCat`, `nameCat`, `activity`)
+    VALUES (@idCat:=:nameidCat_bind, @newC:=:name_bind, @Act:=:nameAct_bind)
+    ON DUPLICATE KEY UPDATE `idCat`=`idCat`,`nameCat` = `nameCat`, `activity`:=:nameAct_bind;
+
+    INSERT INTO `base`(`idB`, `id_category`, `id_goods`) VALUES (@idBase:=:id_bind, @newC:=:name_bind, @new:=:nameG_bind);";
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':id_bind', $idB, PDO::PARAM_STR);
     $stmt->bindParam(':nameidG_bind', $idGood, PDO::PARAM_STR);

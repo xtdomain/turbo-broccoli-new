@@ -44,11 +44,12 @@ class categoryModel extends Model {
     {
 
       $massiv[$key] = "
+      <div>
+      <hr class='group_linie'>
         <div class='DivVisual'>
           <h1 align='center'>Номер: $value[num]</h1>
           <hr>
-          <p>Название категории: <b class='category_name_color'>$value[nameCat]</b><hr></p>
-        </div>
+          <p>Название категории: <b class='category_name_color'>$value[nameCat]</b><hr></p></div><hr class='group_linie'></div>
         ";
     }
     return $massiv;
