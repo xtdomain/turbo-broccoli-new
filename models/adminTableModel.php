@@ -135,7 +135,7 @@ Route::CallErrors(); //деление на 0
       <form action='' method='post'>
       <hr class='group_linie'>
         <div class='DivVisual'>
-          <h1 align='center'>Номер: <input name='id' class='numberSize' type='text' value='$value[idB]' class='tables'; /></h1>
+          <h1 align='center'>Номер: <input name='id' class='numberSize' type='text' value='$value[num]' class='tables'; /></h1>
           <hr>
           <p>Название категории: <select name='category'>{$List($simple_category_table, nameCat, $value['id_category'])}</select></p>
           <p>Название товара: <select name='goods'>{$List($simple_goods_table, name, $value['id_goods'])}</select></p>
@@ -154,7 +154,7 @@ Route::CallErrors(); //деление на 0
     //print_r($this->pagesNumber());
     if(($value == end(static::$result)) && ($this->pagesNumber() == Model::$countPage)) // ВАЖНО!!! ($this->pagesNumber() == Model::$countPage) убрать если нет пагинации
     {/////////////////////////////////
-      $one = $value[idB] +1;
+      $one = $value[num] +1;
       $massiv[$key] .=
       "<form action='' method='post'>
       <hr class='group_linie'>
@@ -183,6 +183,11 @@ Route::CallErrors(); //деление на 0
   public function Update() ///обновление данных о товаре и группе
   {
     if(isset($_POST['update'])){
+      $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+      header("Location: $url");
+
+
+
     $db = dataBase::DB_connection();
 
     $idB = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idB'];
@@ -223,6 +228,9 @@ Route::CallErrors(); //деление на 0
   public static function Add()
   {
     if(isset($_POST['add'])){
+      $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+      header("Location: $url");
+
     $idB = $_POST['id'];
 
     $nameCat = $_POST['category2'];

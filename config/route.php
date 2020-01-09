@@ -2,26 +2,34 @@
 class Route {
   public static $save; // хранит текстовый кусок url - запущенного в этот момент (контроллера перед дейсвтвием, если действия является пагинацией)
   public static $templateName; //хранит имя шаблона
+  public static $templateList = array("admin", "default"); //хранит имена шаблона
   public static function startRoute($name) //сохраняет имя шаблона (например default, admin)
   {
       Route::$templateName = $name;
   }
+
   public static function mainRoute()
   { //этот метод запускает стандартный контроллер, который в свою очередь вызывает шаблон, последний подключает роутер
-    $route = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    if($route[2] == 'out') //временное решение - в контроллере админ невозможно вызвать header методом out
+    $firstRoute = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    $base = "default";
+    $templateList = array("admin", "default");
+    foreach ($templateList as $key => $value)
     {
-
-    }
-    if ($route[1] !== 'admin')
-    {
-      Route::startController("defaultController", "defaultModel", "default");
-    }
-    else if ($route[1] == 'admin')
-    {
-      Route::startController("adminController", "adminModel", "default");
+      if ($firstRoute[1] == $value)
+      {
+        $controllerName = $value . "Controller";
+        $modelName = $value . "Model";
+        Route::startController($controllerName, $modelName, "default");
+      }
+      else
+      {
+        $controllerName = $base . "Controller";
+        $modelName = $base . "Model";
+        Route::startController($controllerName, $modelName, "default");
+      }
     }
   }
+
   public static function startController($controllerName, $modelName, $action) //Автоматическое подключение модулей
   {
     require_once CONTROLLERS . $controllerName. ".php";
@@ -30,15 +38,15 @@ class Route {
     $controller->infos(self::$save, self::$templateName); //передать имена контроллеров в контроллер (перехват из save - и передача в основной контроллер - критически важный параметр)
     if (method_exists($controllerName, $action))
     {
-
       $controller->$action();
-
     }
     else
     {
       Route::CallErrors();
+      echo "string";
     }
   }
+
   public static function addRoute()
   {
     $controllerName = "defaultController";
@@ -56,31 +64,59 @@ class Route {
     {
       if ($route[$i] != '')
       {
-        if(is_file(CONTROLLERS. ucfirst($route[$i]) . "Controller.php")  && !is_file(CONTROLLERS. ucfirst($route[$i+1]) . "Controller.php")) //поиск контроллера в папке и проверка на шаблон
+        if(is_file(CONTROLLERS. ucfirst($route[$i]) . "Controller.php") ) //поиск контроллера в папке
         {
           $controllerName = ucfirst($route[$i]) . "Controller";
           $modelName = ucfirst($route[$i]). "Model";
-
-        /*  if (($route[$i] == 'admin' || $route[$i] == 'default') && ($i > 1)) //вызвать ошибку если пытаться admin вызвать не в начале url, или 2 шаблона сразу(теперь проверку можно использовать ниже в else if)
+          if(!is_file(CONTROLLERS. ucfirst($route[$i+1]) . "Controller.php")) //если контроллер найден, то за ним должно быть действие
+          {
+            if (!is_numeric($route[$i+1]))
+            { //действие - метод
+              $action = $route[$i+1];
+              Route::startController($controllerName, $modelName, $action);
+              if (!method_exists($controllerName, $action))
+              {
+                Route::CallErrors();
+              }
+            }
+            else if(is_numeric($route[$i+1]))
+            { //действие - номер страницы
+              $action = 'page';
+              self::$save = $route[$i]; //сохраненить имя контроллера перед пагинацией
+              Route::startController($controllerName, $modelName, $action);
+              if (!method_exists($controllerName, $action))
+              {
+                Route::CallErrors();
+              }
+            }
+          }
+          else if (empty($route[$i+1]) && $route[$i] != 'default'  && $route[$i] != 'admin')
+          {
+            $route[$i+1] = 1; //если контроллер найден, а действие после него отсутствует -> страница номер 1
+            $action = 'page';
+            self::$save = $route[$i]; //сохраненить имя контроллера перед пагинацией
+            Route::startController($controllerName, $modelName, $action);
+            if (!method_exists($controllerName, $action))
+            {
+              Route::CallErrors();
+            }
+          }
+        }
+        else if ($i<2)
+        {
+          $action = $route[$i]; //проверка первого элемента массива (catalog-site.ru/? или catalog-site.ru/admin/?) если метода нет в шаблоне - вызвать ошибку
+          if (!method_exists($controllerName, $action))
           {
             Route::CallErrors();
-          }*/
-          Route::startController($controllerName, $modelName, $action); //подключить все остальные модули по порядку
-        }
-        else if (!is_numeric($route[$i]))
-        {
-
-          $action = $route[$i];
-
-        }
-        else
-        {
-          $action = "page";
-          self::$save = $route[$i-1]; //сохраненить имя контроллера перед пагинацией
+          }
         }
       }
-      else if (empty($route[$i]) && $i != 1) //проверка на символ / и отсутствие контроллера/действия после него (пустой запрос)
+      else if (empty($route[$i]) && $i != 1) //проверка на символ / и отсутствие контроллера/действия после него (пустой запрос) - вместо ошибки можно сделать вывод 1 страницы
       {
+        /*array_pop ($route);
+        array_push ($route, "1");
+        $url = implode("/", $route);
+        header("Location:" . implode("/", $route));*/
         Route::CallErrors();
       }
       $i--;
@@ -88,8 +124,9 @@ class Route {
   }
   public static function CallErrors() //метод вызова ошибки
   {
-    header("HTTP/1.0 404 Not Found");
-    die();
+    http_response_code(404);
+	include('my_404.php');
+	die();
   }
 }
 ?>

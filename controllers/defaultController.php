@@ -14,10 +14,5 @@ class defaultController extends Controller {
     $this->pageData['account'] = $account; //Подключение вида и модели регистрации
     $this->view->render($this->pageTpl, $this->pageData);
   }
-
-  public function page()
-  {
-  //
-  }
 }
- ?>
+?>

@@ -164,6 +164,7 @@ array_unshift($urlT, "");
       }
     }
     $implodeMassiv = implode(" ", $massiv); //готовая к выводу строка пагинации
+    //print_r((parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)));
     return $implodeMassiv;
   }
 
