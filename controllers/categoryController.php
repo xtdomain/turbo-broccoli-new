@@ -5,7 +5,7 @@ class categoryController extends Controller {
   {
     $this->model = new categoryModel();
     $this->view = new View();
-  
+
   }
 
   public function default()
@@ -21,7 +21,9 @@ class categoryController extends Controller {
 
     $printDiv = $this->printArrays($this->model->printDiv()); //вывод информации в блочном виде
     $this->pageData['printDiv'] = $printDiv;
-
+    $sortButton = $this->model->createSortButton('hiddenSortButton2');
+  $this->pageData['sortButton'] = $sortButton;
+  print_r($_SESSION);
 
     $this->view->render($this->pageTpl, $this->pageData);
 

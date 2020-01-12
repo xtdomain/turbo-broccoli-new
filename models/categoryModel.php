@@ -5,7 +5,7 @@ class categoryModel extends Model {
   public static $result;
   public function goods_tables()
   {
-    $result = self::goods_table(nameCat, 1, 0);
+    $result = self::goods_table(nameCat, 1, 0, 'hiddenSortButton2');
     self::$result = $result;
     return $result;
   }

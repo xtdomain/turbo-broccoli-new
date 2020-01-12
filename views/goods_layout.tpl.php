@@ -9,5 +9,8 @@
 		<?php
 		echo $pageData['pagination'];
 		?>
+		<div class="a_paginationPhp">
+<?php echo $pageData['sortButton']; ?>
+</div>
 	</div>
 </div>

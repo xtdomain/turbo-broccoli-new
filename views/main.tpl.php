@@ -41,10 +41,14 @@ $content->addRoute();
 	</div>
 	<div class="content">
 		<div class="buttonShowAll" >
+			<div class="pagination">
 			<form name="button" action="/category/1/goods/1/admintable/1" method="post">
-				<button type="submit" name="button" >Показывать все</button>
+				<input name='button' type='submit' name="button" value='Показывать все' class='paginationPhp' style='color: #8B0000; background: #DEB887; width:120px;'/>
 			</form>
 		</div>
+
+		</div>
+
 	</div>
 	<footer>
 		<p>Официальный магазин электроники</p>

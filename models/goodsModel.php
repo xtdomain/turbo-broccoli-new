@@ -1,22 +1,29 @@
 <?php
 class goodsModel extends Model {
+  public static $countPage;
   public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
 //public static $whereName; //хранит имя поля группировки - для того чтобы после фильтра показывать только записи конкретной категории (+корректная пагинация)
-  public $maxNotes = 6; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
+  public $maxNotes = 2; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
 public static $result;
 public static $result2;
-  public function goods_tables($m) //$m - автоматически подставляет выбраную категорию, $p для автоматизации: в товарах есть пагинация, но после фильтра пагинации не будет
+  public function goods_tables() //$m - автоматически подставляет выбраную категорию, $p для автоматизации: в товарах есть пагинация, но после фильтра пагинации не будет
   {
-    self::$whereName = $m;
+    if (!empty($_POST['button']))
+    {
+      $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+      header("Location: $url");
+    }
     if (empty($_POST['myForm']))
     {
       $p = 1;
+      $m = 0;
     }
     else
     {
+      $m = $_POST[myForm];
       $p = 0;
     }
-    $result = self::goods_table(name, $p, $m);
+    $result = self::goods_table(name, $p, $m, 'hiddenSortButton');
     self::$result = $result;
     return $result;
   }
@@ -31,7 +38,7 @@ public static $result2;
     {
       $p = 0;
     }
-    $result = self::goods_table(name, 0, 0);
+    $result = self::goods_table(name, 0, 0, 'hiddenSortButton');
     self::$result2 = $result;
     return $result;
   }
@@ -52,30 +59,31 @@ public static $result2;
       foreach(static::$result as $key => $value)
       {
         $massiv[$key] .= "
-          <tr>
+        <tr>
           <td>{$value[num]}</td>
+        ";
+        foreach(static::$result2 as $key => $value2) if ($value['name'] == $value2['name'])
+        {
+        /*  print_r(static::$result2);
+          echo "<br>";
+          echo "<br>";
+          print_r(static::$result);
+          exit;*/
+          $massiv[$key] .= "
+          <td><a href='{$this->onlyTemplate()}/table/{$value2[num]}'>{$value[name]}</a></td>
           ";
-          foreach(static::$result2 as $key => $value2) if ($value['name'] == $value2['name']) {
-          /*  print_r(static::$result2);
-            echo "<br>";
-            echo "<br>";
-            print_r(static::$result);
-            exit;*/
-            $massiv[$key] .= "
-            <td><a href='{$this->onlyTemplate()}/table/{$value2[num]}'>{$value[name]}</a></td>
-            ";
-          }
-
-    }
-    $massiv[$key] .= "
-    </tr>
-  </tbody>
-</table>";
+        }
+      }
+      $massiv[$key] .= "
+        </tr>
+      </tbody>
+    </table>";
     return $massiv;
   }
 
   public function printDiv()
   {
+
     foreach(static::$result as $key => $value)
       {
         $massiv[$key] = "
@@ -92,5 +100,6 @@ public static $result2;
     }
     return $massiv;
   }
+
 }
 ?>

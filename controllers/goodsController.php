@@ -12,15 +12,8 @@ class goodsController extends Controller {
 
   public function default()
   {
-    if (!empty($_POST['myForm']))
-    {
-      self::$m = "$_POST[myForm]"; // категория, которая выбрана в tableController
-    }
-    else
-    {
-      self::$m = 0;
-    }
-    $goods_table = $this->model->goods_tables(self::$m);  // Подключение таблицы товаров из БД
+
+    $goods_table = $this->model->goods_tables();  // Подключение таблицы товаров из БД
     $this->pageData['goods_table'] = $goods_table;
 
     $goods_table2 = $this->model->goods_tables2();  // Подключение таблицы товаров из БД
@@ -36,7 +29,8 @@ class goodsController extends Controller {
 
     $printDiv = $this->printArrays($this->model->printDiv()); //вывод информации в блочном виде
     $this->pageData['printDiv'] = $printDiv;
-
+    $sortButton = $this->model->createSortButton('hiddenSortButton');
+$this->pageData['sortButton'] = $sortButton;
 
 $this->view->render($this->pageTpl, $this->pageData);
   }
@@ -45,7 +39,7 @@ $this->view->render($this->pageTpl, $this->pageData);
     $this->default();
   }
   public function g(){
-
+$this->default();
   }
 }
 ?>

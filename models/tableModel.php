@@ -1,14 +1,15 @@
 <?php
 class tableModel extends Model {
+    public static $countPage;
   public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
-  public $maxNotes = 1;
+  public $maxNotes = 1; //теперь строго 1, т.к. добавлено новое условие на совпадение страницы if ($value['num'] == $this->pageCalculate('page')+1)
 public static $result;
 public static $result2;
 
   public function goods_tables()
   {
                                               //создать запрос в базу данных 1. указать группировку(например 'name' из таблицы товаров) 2. указать LIMIT: 0 - показывать все, 1 - постранично
-    $result = self::goods_table(name, 1, 0); //3. указать дополнительное ограничение where - товары только этой категории, где 0 - отключить, а любой текст соответствует наименованию категории
+    $result = self::goods_table(name, 0, 0); //3. указать дополнительное ограничение where - товары только этой категории, где 0 - отключить, а любой текст соответствует наименованию категории
 self::$result = $result;
     return $result;
   }
@@ -47,7 +48,7 @@ self::$result = $result;
           <td>$value[name]</td>
           <td>
             <ul>";
-            foreach(static::$result2 as $key => $value2) if ($value['name'] == $value2['name'])
+            foreach(static::$result2 as $key => $value2) if ($value['nameCat'] == $value2['nameCat'])
             {
               $massiv[$key] .= "
               <li>
@@ -81,8 +82,9 @@ self::$result = $result;
   public function printDiv()
   {
 
-      foreach(static::$result as $key => $value)
+      foreach(static::$result as $key => $value) if ($value['num'] == $this->pageCalculate('page')+1)
       {
+
         $massiv[$key] = "
         <div>
         <hr class='group_linie'>

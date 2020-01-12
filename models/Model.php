@@ -168,7 +168,7 @@ array_unshift($urlT, "");
     return $implodeMassiv;
   }
 
-  public function pageCalculate() //ОТ КАКОЙ ЦИФРЫ ПОКАЗЫВАТЬ ЗНАЧЕНИЯ БАЗЫ ДАННЫХ - ТОВАРЫ (LIMIT)
+  public function pageCalculate($mode = 'math') //ОТ КАКОЙ ЦИФРЫ ПОКАЗЫВАТЬ ЗНАЧЕНИЯ БАЗЫ ДАННЫХ - ТОВАРЫ (LIMIT)
   {
     $url = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     foreach ($url as $key => $value)
@@ -183,6 +183,7 @@ array_unshift($urlT, "");
             Route::CallErrors(); //страница с номером 0 или превышение количества страниц
           }
           static::$countPage = $result;
+
         }
         else
         {
@@ -191,11 +192,17 @@ array_unshift($urlT, "");
       }
     }
     $math = ($result-1)*$this->maxNotes; //(номер страницы - 1) * кол-во записей
+    if ($mode = 'math') {
     return $math;
+  } else if ($mode = 'page') {
+
+    return static::$countPage;
+  }
   }
 
-  public function goods_table($groupName, $addLimit, $whereName) //группировка по имени или без (=str или =0), с лимитом или без (=1 или = 0), дополнительное ограничение (=str или =0)
+  public function goods_table($groupName, $addLimit, $where = "WHERE category.activity='1' AND goods.activityG='1'", $ASC = 'ASC', $Function = 'SELECT', $JOIN = "INNER JOIN category on base.id_category = category.nameCat INNER JOIN goods on base.id_goods = goods.name", $column = "idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, quantity, disposal, activity, activityG", $table = 'base') //группировка по имени или без (=str или =0), с лимитом или без (=1 или = 0), дополнительное ограничение (=str или =0)
   {
+
     //print_r($groupName);
     if ($groupName !== 0) {
       $group = 'GROUP BY';
@@ -218,27 +225,34 @@ array_unshift($urlT, "");
       $maxNotes = '';
     }
 
-    if ($whereName === 'ALL')
+    if ($where === 'ALL')
     {
-      $where = "OR category.activity='1' OR category.activity='0' OR goods.activityG='1' OR goods.activityG='0'";
+      $whereName = "WHERE category.activity='0' OR goods.activityG='1' OR goods.activityG='0'";
     }
 
-    else if ($whereName != '0')
+    else if ($where != '0')
     {
-      $where = "AND nameCat = '$whereName'";
+      $whereName = "WHERE category.activity='1' AND goods.activityG='1' AND nameCat = '$where'";
     }
     else
     {
-      $where = "";
+      $whereName = "WHERE category.activity='1' AND goods.activityG='1'";
     }
-    $sql = "SELECT DISTINCT @n:=@n+1 as `num`, idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, quantity, disposal, activity, activityG from
-    (select DISTINCT @n:=0, idG, name, base.idB, idCat, nameCat, base.id_category, base.id_goods, goods.short_description, goods.full_description, goods.quantity, goods.disposal, category.activity, goods.activityG
-    FROM base
-    INNER JOIN category on base.id_category = category.nameCat
-    INNER JOIN goods on base.id_goods = goods.name
-  WHERE category.activity='1' AND goods.activityG='1' $where
+
+    if ($ASC != 'ASC' && $ASC != 'DESC')
+    {
+      $buttonName = $ASC;
+      $ASC = $this->sortButton($buttonName);
+    }
+
+    $sql = "{$Function} @n:=@n+1 as `num`, $column from
+    ({$Function} @n:=0, $column
+    FROM $table
+    $JOIN
+    $whereName
+
     $group $group2) AS T
-    ORDER BY num
+    ORDER BY num $ASC
     $LIMIT $mathc $maxNotes
     ";
     $result = array();
@@ -262,6 +276,62 @@ array_unshift($urlT, "");
       $result[$row[$columnId]] = $row;
     }
 return $result;
+  }
+
+
+  public function sortButton($buttonName)
+  {
+    if (isset($_POST[$buttonName]))
+    {
+      if ($_POST[$buttonName] == 'DESC')
+      {
+        $_SESSION[$buttonName] = 'ASC';
+      }
+      if ($_POST[$buttonName] == 'ASC')
+      {
+        $_SESSION[$buttonName] = 'DESC';
+      }
+      $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+      header("Location: $url");
+    }
+    if ($_SESSION[$buttonName] == 'ASC' || $_SESSION[$buttonName] == 'DESC')  //проверка на случай ошибок
+    {
+      $ASC = $_SESSION[$buttonName];
+    }
+    else
+    {
+      $_SESSION[$buttonName] = '';
+    }
+    return $ASC;
+  }
+
+public function createSortButton($buttonName)
+{
+  if (!empty($_SESSION[$buttonName]))
+  {
+    $a = $_SESSION[$buttonName];
+  }
+  else
+  {
+    $a = "DESC";
+  }
+  if ($a == 'DESC')
+  {
+  $s = '&#9660';
+  }
+  else
+  {
+  $s = '&#9650';
+  }
+  $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+  $form = "
+  <div class='pagination'>
+    <form name='sortButton' action='$url' method='post'>
+      <input type='hidden' name='$buttonName' value=$a />
+      <input name='sortButton' type='submit'  value='Сортировать $s' class='paginationPhp' style='color: #8B0000; background: #DEB887; width:120px;'/>
+    </form>
+  </div>";
+  return $form;
   }
 }
 ?>
