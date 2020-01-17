@@ -21,7 +21,7 @@ $content->addRoute();
 			</div>
 		</div>
 		<div class="content" style="">
-			<div class="logo-name"  style="padding-left: 1em; position: relative; left: 0em; margin-top: 5em; right: 0em; ">
+			<div class="logo-name"  style=" position: relative; left: 0em; margin-top: 5em; right: 0em; ">
 				<h1 style="text-align:center">Магазин электроники</h1>
 			</div>
 			<div class="content"  >

@@ -23,7 +23,7 @@ class categoryController extends Controller {
     $this->pageData['printDiv'] = $printDiv;
     $sortButton = $this->model->createSortButton('hiddenSortButton2');
   $this->pageData['sortButton'] = $sortButton;
-  print_r($_SESSION);
+
 
     $this->view->render($this->pageTpl, $this->pageData);
 

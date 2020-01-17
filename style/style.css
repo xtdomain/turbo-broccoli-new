@@ -1,5 +1,6 @@
 .account-form 
 {
+
 	width: 250px; 
 	border: 4px double #99CCFF; 
 	padding: 1em 1em 2em; 
@@ -9,6 +10,7 @@
 	background:#99CCFF; 
 	transition-duration: 1s; 
 	transition-delay: 2s;
+
 }
 .account-form:hover 
 {
@@ -21,6 +23,17 @@
 	top: 0em; 
 	background:#DEB887; 
 	transition: .3s;
+}
+input:checked +label +br +br +span 
+{
+	position: relative;
+	opacity: 0.7;
+	margin: 7px;
+	margin-left: -2px;
+	padding-bottom: 350px;
+	padding-right: 200px;
+	padding-left: 200px;
+	background: darkgray;
 }
 .input-group-user
 {
@@ -58,7 +71,7 @@
 }
 .logo-form
 {
-padding-left: 1em;text-align:left; position: fixed; left: 0em; top: 0em; right: 0em; background:#99CCFF; height: 3em; z-index: 2;
+text-align:left; position: fixed; background:#99CCFF; height: 3em; z-index: 2;
 }
 .content 
 {
@@ -105,7 +118,7 @@ width:200px;
 .buttonShowAll 
 {
 	position: relative; 
-	margin-left: 4em; 
+	
 	margin-bottom: 5em; 
 	clear: left;
 }
@@ -158,18 +171,24 @@ footer
 }
 .pagination 
 {
+
 	display: flex;
 	flex-flow: row wrap;
   	align-items: center;
-  	justify-content: flex-start;
+  	justify-content: center;
 	position: relative; 
-	padding-left: 1em; clear: left;
+	
+
+
 }
 
 .paginationPhp 
 { /* Основной стиль пагинации натроен в Model.php метод Pagination*/
-	float: left; 
+
+	
+
 	margin: 1em; 
+
 	width: 30px; 
 	height: 30px; 
 	padding-right: 1px; 
@@ -207,15 +226,17 @@ footer
 	max-width: 900px;
  	display: flex;
 	flex-flow: row wrap;
-  	align-items: center;
-  	justify-content: flex-start;
+  	align-items: flex-start;
+  justify-content: center;
+
 	position: relative; 
 }
-@media (max-width: 1428px)
+@media (max-width: 1432px)
 {
 	.admin-table 
 	{
 		justify-content: center;
+
 	}
 
 
@@ -223,20 +244,23 @@ footer
 	{
 		justify-content: center;
 
+
 	}
 }
 
-@media (max-width: 1428px)
+@media (max-width: 1432px)
 {
 	.logoCompany
 	{
 		margin-right: -70px;
+
 		justify-content: flex-start;
 	}
 	.accountExit
 	{
 		margin-right: -70px;
 		justify-content: flex-end;
+
 	}
 }
 .category_name_color 

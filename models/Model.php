@@ -200,7 +200,7 @@ array_unshift($urlT, "");
   }
   }
 
-  public function goods_table($groupName, $addLimit, $where = "WHERE category.activity='1' AND goods.activityG='1'", $ASC = 'ASC', $Function = 'SELECT', $JOIN = "INNER JOIN category on base.id_category = category.nameCat INNER JOIN goods on base.id_goods = goods.name", $column = "idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, quantity, disposal, activity, activityG", $table = 'base') //группировка по имени или без (=str или =0), с лимитом или без (=1 или = 0), дополнительное ограничение (=str или =0)
+  public function goods_table($groupName, $addLimit, $where = "WHERE category.activity='1' AND goods.activityG='1'", $order = 'num',  $ASC = 'ASC', $Function = 'SELECT', $JOIN = "INNER JOIN category on base.id_category = category.nameCat INNER JOIN goods on base.id_goods = goods.name", $column = "idG, name, idB, idCat, nameCat, id_category, id_goods, short_description, full_description, quantity, disposal, activity, activityG", $table = 'base') //группировка по имени или без (=str или =0), с лимитом или без (=1 или = 0), дополнительное ограничение (=str или =0)
   {
 
     //print_r($groupName);
@@ -252,7 +252,7 @@ array_unshift($urlT, "");
     $whereName
 
     $group $group2) AS T
-    ORDER BY num $ASC
+    ORDER BY $order $ASC
     $LIMIT $mathc $maxNotes
     ";
     $result = array();
@@ -272,28 +272,16 @@ array_unshift($urlT, "");
     $result = array();
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
       $result[$row[$columnId]] = $row;
     }
-return $result;
+    return $result;
   }
 
 
   public function sortButton($buttonName)
   {
-    if (isset($_POST[$buttonName]))
-    {
-      if ($_POST[$buttonName] == 'DESC')
-      {
-        $_SESSION[$buttonName] = 'ASC';
-      }
-      if ($_POST[$buttonName] == 'ASC')
-      {
-        $_SESSION[$buttonName] = 'DESC';
-      }
-      $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-      header("Location: $url");
-    }
     if ($_SESSION[$buttonName] == 'ASC' || $_SESSION[$buttonName] == 'DESC')  //проверка на случай ошибок
     {
       $ASC = $_SESSION[$buttonName];
@@ -301,6 +289,19 @@ return $result;
     else
     {
       $_SESSION[$buttonName] = '';
+    }
+    if (isset($_POST[$buttonName]))
+    {
+      if ($_POST[$buttonName] == 'DESC')
+      {
+        $_SESSION[$buttonName] = 'ASC';
+      }
+      else if ($_POST[$buttonName] == 'ASC')
+      {
+        $_SESSION[$buttonName] = 'DESC';
+      }
+      $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+      header("Location: $url");
     }
     return $ASC;
   }
@@ -310,19 +311,22 @@ public function createSortButton($buttonName)
   if (!empty($_SESSION[$buttonName]))
   {
     $a = $_SESSION[$buttonName];
+    $s = '&#9650';
+    if ($a == 'DESC')
+    {
+    $s = '&#9660';
+    }
   }
   else
   {
-    $a = "DESC";
+    $a = "ASC";
+    $s = '&#9650';
+    if ($a == 'DESC')
+    {
+    $s = '&#9660';
+    }
   }
-  if ($a == 'DESC')
-  {
-  $s = '&#9660';
-  }
-  else
-  {
-  $s = '&#9650';
-  }
+
   $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
   $form = "
   <div class='pagination'>

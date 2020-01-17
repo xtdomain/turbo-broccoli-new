@@ -2,7 +2,7 @@
 class adminTableModel extends Model {
   public static $id = idB; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
 //public static $whereName; //хранит имя поля группировки - для того чтобы после фильтра показывать только записи конкретной категории (+корректная пагинация)
-  public $maxNotes = 2; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
+  public $maxNotes = 20; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
 public static $result;
 
 public function  pagesNumber() //количество страниц (в этой таблице страниц больше - лимит убирается, тк нужно показывать даже неактивные категории и товары)
@@ -28,7 +28,7 @@ Route::CallErrors(); //деление на 0
     {
       $p = 0;
     }
-    $result = self::goods_table(0, 1, ALL); // ВАЖНО!!! если goods_table(0, 1, 2); то ($this->pagesNumber() == Model::$countPage) удалить
+    $result = self::goods_table(0, 1, ALL, 'idB'); // ВАЖНО!!! если goods_table(0, 1, 2); то ($this->pagesNumber() == Model::$countPage) удалить
     self::$result = $result;
     return $result;
   }
@@ -135,7 +135,7 @@ Route::CallErrors(); //деление на 0
       <form action='' method='post'>
       <hr class='group_linie'>
         <div class='DivVisual'>
-          <h1 align='center'>Номер: <input name='id' class='numberSize' type='text' value='$value[num]' class='tables'; /></h1>
+          <h1 align='center'>Номер: <input name='id' class='numberSize' type='text' value='$value[idB]' class='tables'; /></h1>
           <hr>
           <p>Название категории: <select name='category'>{$List($simple_category_table, nameCat, $value['id_category'])}</select></p>
           <p>Название товара: <select name='goods'>{$List($simple_goods_table, name, $value['id_goods'])}</select></p>
@@ -154,7 +154,7 @@ Route::CallErrors(); //деление на 0
     //print_r($this->pagesNumber());
     if(($value == end(static::$result)) && ($this->pagesNumber() == Model::$countPage)) // ВАЖНО!!! ($this->pagesNumber() == Model::$countPage) убрать если нет пагинации
     {/////////////////////////////////
-      $one = $value[num] +1;
+      $one = $value['idB'] +1;
       $massiv[$key] .=
       "<form action='' method='post'>
       <hr class='group_linie'>
@@ -163,7 +163,7 @@ Route::CallErrors(); //деление на 0
           <hr>
           <p>Название категории: <input name='category2' type='text' value='' class='tables2'; /></p>
           <p>Название товара: <input name='goods2' type='text' value='' class='tables2'; /></p>
-
+          <p align='center' style='color:gold;'><input class='checkbox' type='checkbox' name='checkbox' checked='checked' value='1' style='display:inline-block; width:20px; height:20px;vertical-align:middle;'/><label>Сохранить параметры</label><br><br><span></span></p>
           <p>Активность категории:   <select class='tables' name='activity2'>{$List($simple_category_table, activity, 1)}</select></p>
           <p>Активность товара:   <select class='tables' name='activityG2'>{$List($simple_goods_table, activityG, 1)}</select></p>
           <p>Краткое описание тов: <textarea name='short_description2' type='text' class='text'; /></textarea></p>
@@ -171,7 +171,8 @@ Route::CallErrors(); //деление на 0
           <p>Кол-во на складе: <input name='quantity2' type='text' value='' class='tables'; /></p>
           <p>Возможность заказа: <input name='disposal2' type='text' value='' class='tables'; /></p>
           <hr>
-          <p class='buttonHolder'><input name='add' type='submit' value='Добавить' style='background: #CCCCFF;' /></p>
+
+          <p class='buttonHolder'><input name='add' type='submit' value='Добавить' style='background: #CCCCFF; height:20px; vertical-align:middle;' /></p>
         </div>
         <hr class='group_linie'>
       </form>";
@@ -182,95 +183,101 @@ Route::CallErrors(); //деление на 0
 
   public function Update() ///обновление данных о товаре и группе
   {
-    if(isset($_POST['update'])){
+    if(isset($_POST['update']))
+    {
       $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       header("Location: $url");
 
+      $db = dataBase::DB_connection();
 
+      $idB = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idB'];
+      //$idGood = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idG'];
+      //$idCat = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idCat'];
+      $nameCat = $_POST['category'];
+      $nameGood = $_POST['goods'];
+      $activity = $_POST['activity'];
+      $activityG = $_POST['activityG'];
+      $short_description = $_POST['short_description'];
+      $full_description = $_POST['full_description'];
+      $quantity = $_POST['quantity'];
+      $disposal = $_POST['disposal'];
 
-    $db = dataBase::DB_connection();
-
-    $idB = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idB'];
-    //$idGood = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idG'];
-    //$idCat = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idCat'];
-    $nameCat = $_POST['category'];
-    $nameGood = $_POST['goods'];
-    $activity = $_POST['activity'];
-    $activityG = $_POST['activityG'];
-    $short_description = $_POST['short_description'];
-    $full_description = $_POST['full_description'];
-    $quantity = $_POST['quantity'];
-    $disposal = $_POST['disposal'];
-
-    $sql = "UPDATE `category`, `goods`, `base` SET id_category=:name_bind, id_goods=:nameG_bind, activity=:Act_bind, activityG=:ActG_bind, short_description=:ShDisc_bind, full_description=:FlDisc_bind, quantity=:Quant_bind, disposal=:Disp_bind  WHERE category.nameCat=:name_bind AND goods.name=:nameG_bind AND base.idB=:idB_bind";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
-    //$stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
-    $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
-    $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
-    $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
-  //  $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
-    $stmt->bindParam(':id_bind', $idCat, PDO::PARAM_STR);
-    $stmt->bindParam(':Act_bind', $activity, PDO::PARAM_STR);
-    $stmt->bindParam(':ActG_bind', $activityG, PDO::PARAM_STR);
-    $stmt->bindParam(':ShDisc_bind', $short_description, PDO::PARAM_STR);
-    $stmt->bindParam(':FlDisc_bind', $full_description, PDO::PARAM_STR);
-    $stmt->bindParam(':Quant_bind', $quantity, PDO::PARAM_STR);
-    $stmt->bindParam(':Disp_bind', $disposal, PDO::PARAM_STR);
-    return $stmt->execute();
-
-    } else { }
-
+      $sql = "UPDATE `category`, `goods`, `base` SET id_category=:name_bind, id_goods=:nameG_bind, activity=:Act_bind, activityG=:ActG_bind, short_description=:ShDisc_bind, full_description=:FlDisc_bind, quantity=:Quant_bind, disposal=:Disp_bind  WHERE category.nameCat=:name_bind AND goods.name=:nameG_bind AND base.idB=:idB_bind";
+      $stmt = $db->prepare($sql);
+      $stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
+      //$stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
+      $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
+      $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
+      $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
+    //  $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
+      $stmt->bindParam(':id_bind', $idCat, PDO::PARAM_STR);
+      $stmt->bindParam(':Act_bind', $activity, PDO::PARAM_STR);
+      $stmt->bindParam(':ActG_bind', $activityG, PDO::PARAM_STR);
+      $stmt->bindParam(':ShDisc_bind', $short_description, PDO::PARAM_STR);
+      $stmt->bindParam(':FlDisc_bind', $full_description, PDO::PARAM_STR);
+      $stmt->bindParam(':Quant_bind', $quantity, PDO::PARAM_STR);
+      $stmt->bindParam(':Disp_bind', $disposal, PDO::PARAM_STR);
+      return $stmt->execute();
+    }
+    else
+    {
+    }
   }
-
-
 
   public static function Add()
   {
-    if(isset($_POST['add'])){
+    if(isset($_POST['add']))
+    {
       $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       header("Location: $url");
+      $idB = $_POST['id'];
+      $nameCat = $_POST['category2'];
+      $nameGood = $_POST['goods2'];
+      $activity = $_POST['activity2'];
+      $activityG = $_POST['activityG2'];
+      $short_description = $_POST['short_description2'];
+      $full_description = $_POST['full_description2'];
+      $quantity = $_POST['quantity2'];
+      $disposal = $_POST['disposal2'];
+      if ($_POST['checkbox'] == 1)//добавить новый товар в новую категорию, но сохранить их параметры.
+      {
+        $goodsParameter = "`idG`=`idG`, `name`=`name`, `activityG`=`activityG`, `short_description`=`short_description`, `full_description`=`full_description`, `quantity`=`quantity`, `disposal`=`disposal`;";
+        $categoryParameter = "`idCat`=`idCat`,`nameCat` = `nameCat`, `activity`=`activity`;";
+      }
+      else //добавить новый товар в новую категорию и изменить их параметры.
+      {
+        $goodsParameter = "`idG`=`idG`, `name`=`name`, `activityG`:=:nameActG_bind, `short_description`:=:nameShDisc_bind, `full_description`:=:nameFlDisc_bind, `quantity`:=:nameQuant_bind, `disposal`:=:nameDisp_bind;";
+        $categoryParameter = "`idCat`=`idCat`,`nameCat` = `nameCat`, `activity`=:nameAct_bind;";
+      }
+      //print_r($one);
+      $db = dataBase::DB_connection();
 
-    $idB = $_POST['id'];
+      $sql = "INSERT INTO `goods`(`idG`, `name`, `activityG`, `short_description`, `full_description`, `quantity`, `disposal`)
+      VALUES (@idG:=:nameidG_bind, @new:=:nameG_bind, @act:=:nameActG_bind, @sd:=:nameShDisc_bind, @fd:=:nameFlDisc_bind, @quant:=:nameQuant_bind, @disp:=:nameDisp_bind)
+      ON DUPLICATE KEY UPDATE $goodsParameter
 
-    $nameCat = $_POST['category2'];
-    $nameGood = $_POST['goods2'];
-    $activity = $_POST['activity2'];
-    $activityG = $_POST['activityG2'];
-    $short_description = $_POST['short_description2'];
-    $full_description = $_POST['full_description2'];
-    $quantity = $_POST['quantity2'];
-    $disposal = $_POST['disposal2'];
-  //print_r($one);
-    $db = dataBase::DB_connection();
+      INSERT INTO `category`(`idCat`, `nameCat`, `activity`)
+      VALUES (@idCat:=:nameidCat_bind, @newC:=:name_bind, @actC:=:nameAct_bind)
+      ON DUPLICATE KEY UPDATE $categoryParameter;
 
-    $sql = "INSERT INTO `goods`(`idG`, `name`, `activityG`, `short_description`, `full_description`, `quantity`, `disposal`)
-    VALUES (@idG:=:nameidG_bind, @new:=:nameG_bind, @act:=:nameActG_bind, @sd:=:nameShDisc_bind, @fd:=:nameFlDisc_bind, @quant:=:nameQuant_bind, @disp:=:nameDisp_bind)
-    ON DUPLICATE KEY UPDATE `idG`=`idG`, `name`=`name`, `activityG`:=:nameActG_bind, `short_description`:=:nameShDisc_bind, `full_description`:=:nameFlDisc_bind, `quantity`:=:nameQuant_bind, `disposal`:=:nameDisp_bind;
-
-    INSERT INTO `category`(`idCat`, `nameCat`, `activity`)
-    VALUES (@idCat:=:nameidCat_bind, @newC:=:name_bind, @Act:=:nameAct_bind)
-    ON DUPLICATE KEY UPDATE `idCat`=`idCat`,`nameCat` = `nameCat`, `activity`:=:nameAct_bind;
-
-    INSERT INTO `base`(`idB`, `id_category`, `id_goods`) VALUES (@idBase:=:id_bind, @newC:=:name_bind, @new:=:nameG_bind);";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(':id_bind', $idB, PDO::PARAM_STR);
-    $stmt->bindParam(':nameidG_bind', $idGood, PDO::PARAM_STR);
-    $stmt->bindParam(':nameidCat_bind', $idCat, PDO::PARAM_STR);
-    $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
-    $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
-    $stmt->bindParam(':nameAct_bind', $activity, PDO::PARAM_STR);
-    $stmt->bindParam(':nameActG_bind', $activityG, PDO::PARAM_STR);
-    $stmt->bindParam(':nameShDisc_bind', $short_description, PDO::PARAM_STR);
-    $stmt->bindParam(':nameFlDisc_bind', $full_description, PDO::PARAM_STR);
-    $stmt->bindParam(':nameQuant_bind', $quantity, PDO::PARAM_STR);
-    $stmt->bindParam(':nameDisp_bind', $disposal, PDO::PARAM_STR);
-
-    return $stmt->execute();
-
-  } else { }
-
+      INSERT INTO `base`(`idB`, `id_category`, `id_goods`) VALUES (@idBase:=:id_bind, @newC:=:name_bind, @new:=:nameG_bind);";
+      $stmt = $db->prepare($sql);
+      $stmt->bindParam(':id_bind', $idB, PDO::PARAM_STR);
+      $stmt->bindParam(':nameidG_bind', $idGood, PDO::PARAM_STR);
+      $stmt->bindParam(':nameidCat_bind', $idCat, PDO::PARAM_STR);
+      $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
+      $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
+      $stmt->bindParam(':nameAct_bind', $activity, PDO::PARAM_STR);
+      $stmt->bindParam(':nameActG_bind', $activityG, PDO::PARAM_STR);
+      $stmt->bindParam(':nameShDisc_bind', $short_description, PDO::PARAM_STR);
+      $stmt->bindParam(':nameFlDisc_bind', $full_description, PDO::PARAM_STR);
+      $stmt->bindParam(':nameQuant_bind', $quantity, PDO::PARAM_STR);
+      $stmt->bindParam(':nameDisp_bind', $disposal, PDO::PARAM_STR);
+      return $stmt->execute();
+    }
+    else
+    {
+    }
   }
-
 }
 ?>

@@ -23,7 +23,7 @@ public static $result2;
       $m = $_POST[myForm];
       $p = 0;
     }
-    $result = self::goods_table(name, $p, $m, 'hiddenSortButton');
+    $result = self::goods_table(name, $p, $m, 'num', 'hiddenSortButton');
     self::$result = $result;
     return $result;
   }
@@ -38,7 +38,7 @@ public static $result2;
     {
       $p = 0;
     }
-    $result = self::goods_table(name, 0, 0, 'hiddenSortButton');
+    $result = self::goods_table(name, 0, 0, 'num', 'hiddenSortButton');
     self::$result2 = $result;
     return $result;
   }

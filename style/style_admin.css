@@ -36,6 +36,17 @@
 	background:#DEB887; 
 	transition: .3s;
 }
+input:checked +label +br +br +span 
+{
+	position: relative;
+	opacity: 0.7;
+	margin: 7px;
+	margin-left: -2px;
+	padding-bottom: 350px;
+	padding-right: 200px;
+	padding-left: 200px;
+	background: darkgray;
+}
 .for-submit 
 {
 
@@ -207,7 +218,7 @@ footer
 	max-width: 900px;
  	display: flex;
 	flex-flow: row wrap;
-  	align-items: center;
+  	align-items: flex-start;
   	justify-content: flex-start;
 	position: relative; 
 }
