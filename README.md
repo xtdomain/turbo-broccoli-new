@@ -1,3 +1,4 @@
+![](images/div.png)
 
 # Пишем свой фреймворк - версия 9
 
@@ -243,3 +244,9 @@ class adminModel extends Model {
 
    Добавлен метод (будет доработан) в роутер startRoute() - теперь имя шаблона передается заранее перед html тегами: <?php $content->startRoute('default') ?>
       используется для видов account.tpl и accaunt.exit.tpl, (и для всех остальных) теперь кнопка "на главную возвращает в текущий шаблон", для выхода из админ нужно выйти
+
+## Оформление:
+
+![](images/catalog-site1.png)
+![](images/catalog-site2.png)
+![](images/catalog-site3.png)
