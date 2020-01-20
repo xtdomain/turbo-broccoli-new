@@ -36,9 +36,13 @@
 	background:#DEB887; 
 	transition: .3s;
 }
-input:checked +label +br +br +span 
+
+input:checked +span 
 {
-	position: relative;
+
+	position: absolute;
+	display:block;
+
 	opacity: 0.7;
 	margin: 7px;
 	margin-left: -2px;
@@ -47,6 +51,10 @@ input:checked +label +br +br +span
 	padding-left: 200px;
 	background: darkgray;
 }
+.checkbox {
+ width:20px; height:20px;vertical-align:middle;
+}
+
 .for-submit 
 {
 

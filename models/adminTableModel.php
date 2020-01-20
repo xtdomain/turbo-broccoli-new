@@ -59,7 +59,7 @@ Route::CallErrors(); //деление на 0
       $massiv[$key] .=
       "<form action='' method='post'>
         <tr>
-          <td><input name='id' type='text' value='$value[idB]' class='tables'; /></td>
+          <td><input name='id' type='text' value='$value[idB]' class='tables'; /><input name='id2' type='hidden' value='$value[idB]' ; /></td>
           <td><input name='category' type='text' value='$value[id_category]'class='tables2'; /></td>
           <td><input name='goods' type='text' value='$value[id_goods]' class='tables2'; /></td>
           <td><input name='activity' type='text' value='$value[activity]' class='tables'; /></td>
@@ -105,6 +105,8 @@ Route::CallErrors(); //деление на 0
     $massiv = [];
     $List = function($nameField, $column, $selected)
     {
+$deleteButton = "<form action='' method='post'><input name='deleteLine' type='submit' value='Удалить' style='background: #CCCCFF; height:20px; vertical-align:middle;' /></form>";
+
       $options = "";
       if ($column == 'activity' || $column == 'activityG') {
         if ($selected == 1) {
@@ -135,10 +137,11 @@ Route::CallErrors(); //деление на 0
       <form action='' method='post'>
       <hr class='group_linie'>
         <div class='DivVisual'>
-          <h1 align='center'>Номер: <input name='id' class='numberSize' type='text' value='$value[idB]' class='tables'; /></h1>
+          <h1 align='center'>Номер: <input name='id' class='numberSize' type='text' value='$value[idB]' class='tables'; /><input name='id2' type='hidden' value='$value[idB]' ; /></h1>
           <hr>
-          <p>Название категории: <select name='category'>{$List($simple_category_table, nameCat, $value['id_category'])}</select></p>
-          <p>Название товара: <select name='goods'>{$List($simple_goods_table, name, $value['id_goods'])}</select></p>
+          <div style='position: relative; vertical-align: middle;'><p>Название категории: <select name='category'>{$List($simple_category_table, nameCat, $value['id_category'])}</select><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='deleteCategory' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
+          <div style='position: relative; vertical-align: middle;'><p>Название товара: <select name='goods'>{$List($simple_goods_table, name, $value['id_goods'])}</select><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='deleteGood' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
+<p align='center' style='color:gold;'><label>Сохранить параметры</label><input class='checkbox' type='checkbox' name='checkbox' checked='checked' value='1'/><span></span></p>
           <p>Активность категории: <select name='activity'>{$List($simple_category_table, activity, $value['activity'])}</select></p>
           <p>Активность товара: <select name='activityG'>{$List($simple_goods_table, activityG, $value['activityG'])}</select></p>
           <p>Краткое описание тов: <textarea name='short_description' type='text' class='text'; />$value[short_description]</textarea></p>
@@ -146,7 +149,8 @@ Route::CallErrors(); //деление на 0
           <p>Кол-во на складе: <input name='quantity' type='text' value='$value[quantity]' class='tables';/></p>
           <p>Возможность заказа: <input name='disposal' type='text' value='$value[disposal]'class='tables';/></p>
           <hr>
-          <p class='buttonHolder'><input name='update' type='submit' value='Изменить' /></p>
+          <div style='position: relative; vertical-align: middle;'><p class='buttonHolder'><input name='update' type='submit' value='Изменить' /><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='delete' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
+
         </div>
         <hr class='group_linie'>
       </form>";
@@ -163,7 +167,7 @@ Route::CallErrors(); //деление на 0
           <hr>
           <p>Название категории: <input name='category2' type='text' value='' class='tables2'; /></p>
           <p>Название товара: <input name='goods2' type='text' value='' class='tables2'; /></p>
-          <p align='center' style='color:gold;'><input class='checkbox' type='checkbox' name='checkbox' checked='checked' value='1' style='display:inline-block; width:20px; height:20px;vertical-align:middle;'/><label>Сохранить параметры</label><br><br><span></span></p>
+          <p align='center' style='color:gold;'><label>Сохранить параметры</label><input class='checkbox' type='checkbox' name='checkbox' checked='checked' value='1'/><span></span></p>
           <p>Активность категории:   <select class='tables' name='activity2'>{$List($simple_category_table, activity, 1)}</select></p>
           <p>Активность товара:   <select class='tables' name='activityG2'>{$List($simple_goods_table, activityG, 1)}</select></p>
           <p>Краткое описание тов: <textarea name='short_description2' type='text' class='text'; /></textarea></p>
@@ -183,14 +187,16 @@ Route::CallErrors(); //деление на 0
 
   public function Update() ///обновление данных о товаре и группе
   {
-    if(isset($_POST['update']))
+
+    if(isset($_POST['update']) || isset($_POST['delete']) || isset($_POST['deleteGood']) || isset($_POST['deleteCategory']))
     {
       $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       header("Location: $url");
 
       $db = dataBase::DB_connection();
 
-      $idB = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idB'];
+        $idB = $_POST['id'];
+$idB_hidden = $_POST['id2'];
       //$idGood = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idG'];
       //$idCat = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idCat'];
       $nameCat = $_POST['category'];
@@ -202,23 +208,87 @@ Route::CallErrors(); //деление на 0
       $quantity = $_POST['quantity'];
       $disposal = $_POST['disposal'];
 
-      $sql = "UPDATE `category`, `goods`, `base` SET id_category=:name_bind, id_goods=:nameG_bind, activity=:Act_bind, activityG=:ActG_bind, short_description=:ShDisc_bind, full_description=:FlDisc_bind, quantity=:Quant_bind, disposal=:Disp_bind  WHERE category.nameCat=:name_bind AND goods.name=:nameG_bind AND base.idB=:idB_bind";
-      $stmt = $db->prepare($sql);
-      $stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
-      //$stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
-      $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
-      $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
+      if(isset($_POST['delete']))
+      {
+
+$sql = "DELETE FROM `base` WHERE base.idB=:idB_bind;";
+$stmt = $db->prepare($sql);
+  $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
+
+} else if (isset($_POST['deleteGood'])) {
+
+
+
+
+
+
+
+
+  $sql = "DELETE goods FROM goods INNER JOIN base on base.id_goods = goods.name WHERE base.id_goods=:nameG_bind;";
+  $stmt = $db->prepare($sql);
       $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
-    //  $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
-      $stmt->bindParam(':id_bind', $idCat, PDO::PARAM_STR);
-      $stmt->bindParam(':Act_bind', $activity, PDO::PARAM_STR);
-      $stmt->bindParam(':ActG_bind', $activityG, PDO::PARAM_STR);
-      $stmt->bindParam(':ShDisc_bind', $short_description, PDO::PARAM_STR);
-      $stmt->bindParam(':FlDisc_bind', $full_description, PDO::PARAM_STR);
-      $stmt->bindParam(':Quant_bind', $quantity, PDO::PARAM_STR);
-      $stmt->bindParam(':Disp_bind', $disposal, PDO::PARAM_STR);
-      return $stmt->execute();
+
+} else if (isset($_POST['deleteCategory'])) {
+
+  $sql = "DELETE category FROM category INNER JOIN base on base.id_category = category.nameCat WHERE base.id_category=:name_bind;";
+  $stmt = $db->prepare($sql);
+      $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
+} else {
+
+
+
+  if ($_POST['checkbox'] == 1)//добавить новый товар в новую категорию, но сохранить их параметры.
+  {
+
+    if ( $_POST['id'] == self::goods_table(0, 1, ALL, 'idB')[$_POST['id']]['idB'] ) //проверка на изменение номера строки на уже существующий в таблице
+    {
+Route::CallErrors();
     }
+
+
+    $Parameter = "UPDATE `category`, `goods`, `base` SET base.idB=:idB_bind, id_category=:name_bind, id_goods=:nameG_bind, `activity`=`activity`, `activityG`=`activityG`, `short_description`=`short_description`, `full_description`=`full_description`, `quantity`=`quantity`, `disposal`=`disposal`  WHERE category.nameCat=:name_bind AND goods.name=:nameG_bind AND base.idB=:idB_hidden_bind;";
+    $sql = $Parameter;
+    $stmt = $db->prepare($sql);
+$stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
+$stmt->bindParam(':idB_hidden_bind', $idB_hidden, PDO::PARAM_STR);
+    $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
+    $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
+
+}
+
+  else //добавить новый товар в новую категорию и изменить их параметры.
+  {
+    if ( $_POST['id'] == self::goods_table(0, 1, ALL, 'idB')[$_POST['id']]['idB'] ) //проверка на изменение номера строки на уже существующий в таблице
+    {
+  Route::CallErrors();
+    }
+
+    $Parameter = "UPDATE `category`, `goods`, `base` SET base.idB=:idB_bind, id_category=:name_bind, id_goods=:nameG_bind, activity=:Act_bind, activityG=:ActG_bind, short_description=:ShDisc_bind, full_description=:FlDisc_bind, quantity=:Quant_bind, disposal=:Disp_bind  WHERE category.nameCat=:name_bind AND goods.name=:nameG_bind AND base.idB=:idB_hidden_bind";
+    $sql = $Parameter;
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
+    //$stmt->bindParam(':idG_bind', $idGood, PDO::PARAM_STR);
+    $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
+    $stmt->bindParam(':idB_hidden_bind', $idB_hidden, PDO::PARAM_STR);
+    $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
+    $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
+  //  $stmt->bindParam(':idB_bind', $idB, PDO::PARAM_STR);
+    $stmt->bindParam(':id_bind', $idCat, PDO::PARAM_STR);
+    $stmt->bindParam(':Act_bind', $activity, PDO::PARAM_STR);
+    $stmt->bindParam(':ActG_bind', $activityG, PDO::PARAM_STR);
+    $stmt->bindParam(':ShDisc_bind', $short_description, PDO::PARAM_STR);
+    $stmt->bindParam(':FlDisc_bind', $full_description, PDO::PARAM_STR);
+    $stmt->bindParam(':Quant_bind', $quantity, PDO::PARAM_STR);
+    $stmt->bindParam(':Disp_bind', $disposal, PDO::PARAM_STR);
+
+
+}
+} return $stmt->execute();
+
+
+}
+
+
     else
     {
     }
@@ -258,7 +328,7 @@ Route::CallErrors(); //деление на 0
 
       INSERT INTO `category`(`idCat`, `nameCat`, `activity`)
       VALUES (@idCat:=:nameidCat_bind, @newC:=:name_bind, @actC:=:nameAct_bind)
-      ON DUPLICATE KEY UPDATE $categoryParameter;
+      ON DUPLICATE KEY UPDATE $categoryParameter
 
       INSERT INTO `base`(`idB`, `id_category`, `id_goods`) VALUES (@idBase:=:id_bind, @newC:=:name_bind, @new:=:nameG_bind);";
       $stmt = $db->prepare($sql);

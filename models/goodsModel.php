@@ -1,6 +1,6 @@
 <?php
 class goodsModel extends Model {
-  public static $countPage;
+
   public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
 //public static $whereName; //хранит имя поля группировки - для того чтобы после фильтра показывать только записи конкретной категории (+корректная пагинация)
   public $maxNotes = 2; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
@@ -83,7 +83,7 @@ public static $result2;
 
   public function printDiv()
   {
-
+$massiv = [];
     foreach(static::$result as $key => $value)
       {
         $massiv[$key] = "

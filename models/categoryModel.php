@@ -1,7 +1,7 @@
 <?php
 class categoryModel extends Model {
   public static $id = idCat; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
-  public $maxNotes = 1;
+  public $maxNotes = 2;
   public static $result;
   public function goods_tables()
   {

@@ -182,7 +182,7 @@ array_unshift($urlT, "");
           {
             Route::CallErrors(); //страница с номером 0 или превышение количества страниц
           }
-          static::$countPage = $result;
+          self::$countPage = $result;
 
         }
         else
@@ -196,7 +196,7 @@ array_unshift($urlT, "");
     return $math;
   } else if ($mode = 'page') {
 
-    return static::$countPage;
+    return self::$countPage;
   }
   }
 

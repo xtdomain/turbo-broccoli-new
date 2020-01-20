@@ -55,9 +55,13 @@ class Route {
     $route = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     if (empty($route[1]) || ($route[1] == 'default' && empty($route[2])) || ($route[1] == 'admin' && empty($route[2]))) //Подключение списка товаров и услуг на стартовой странице и в админке
     {
-      Route::startController("admintableController", "admintableModel", "default");
+
       Route::startController("goodsController", "goodsModel", "default");
       Route::startController("categoryController", "categoryModel", "default");
+      if ($route[1] == 'admin')
+      {
+        Route::startController("admintableController", "admintableModel", "default"); //таблица редактирования БД только после входа в ЛК
+      }
     }
     $i = count($route)-1;
     while($i > 0)
@@ -68,6 +72,10 @@ class Route {
         {
           $controllerName = ucfirst($route[$i]) . "Controller";
           $modelName = ucfirst($route[$i]). "Model";
+          if ($route[$i] == 'admintable' && $route[1] != 'admin') //таблица редактирования БД только после входа в ЛК
+          {
+            Route::CallErrors();
+          }
           if(!is_file(CONTROLLERS. ucfirst($route[$i+1]) . "Controller.php")) //если контроллер найден, то за ним должно быть действие
           {
             if (!is_numeric($route[$i+1]))
@@ -82,7 +90,7 @@ class Route {
             else if(is_numeric($route[$i+1]))
             { //действие - номер страницы
               $action = 'page';
-              self::$save = $route[$i]; //сохраненить имя контроллера перед пагинацией
+              self::$save = $route[$i]; //сохранить имя контроллера перед пагинацией
               Route::startController($controllerName, $modelName, $action);
               if (!method_exists($controllerName, $action))
               {

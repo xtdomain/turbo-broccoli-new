@@ -49,10 +49,9 @@ input:checked +label +br +br +span
 }
 .for-submit 
 {
-	
+
 	padding-top: 1em;
 	padding-bottom: 0em;
-
 }
 .no-accounts 
 {
@@ -118,7 +117,7 @@ width:200px;
 .buttonShowAll 
 {
 	position: relative; 
-	
+	margin-left: 4em; 
 	margin-bottom: 5em; 
 	clear: left;
 }
@@ -171,24 +170,18 @@ footer
 }
 .pagination 
 {
-
 	display: flex;
 	flex-flow: row wrap;
   	align-items: center;
-  	justify-content: center;
+  	justify-content: flex-start;
 	position: relative; 
-	
-
-
+	padding-left: 1em; clear: left;
 }
 
 .paginationPhp 
 { /* Основной стиль пагинации натроен в Model.php метод Pagination*/
-
-	
-
+	float: left; 
 	margin: 1em; 
-
 	width: 30px; 
 	height: 30px; 
 	padding-right: 1px; 
@@ -212,13 +205,14 @@ footer
 }
 .standart-table 
 {
-	min-width: 500px;
+		min-width: 500px;
 	max-width: 900px;
  	display: flex;
 	flex-flow: row wrap;
   	align-items: center;
   	justify-content: flex-start;
 	position: relative; 
+
 }
 .admin-table 
 {
@@ -227,40 +221,36 @@ footer
  	display: flex;
 	flex-flow: row wrap;
   	align-items: flex-start;
-  justify-content: center;
-
+  	justify-content: center;
 	position: relative; 
 }
-@media (max-width: 1432px)
+@media (max-width: 1428px){
+
+.admin-table 
 {
-	.admin-table 
-	{
-		justify-content: center;
-
-	}
-
-
-	.pagination
-	{
-		justify-content: center;
-
-
-	}
+justify-content: center;
 }
 
-@media (max-width: 1432px)
+
+.pagination
+{
+	justify-content: center;
+
+}
+
+}
+
+@media (max-width: 1428px)
 {
 	.logoCompany
 	{
 		margin-right: -70px;
-
 		justify-content: flex-start;
 	}
 	.accountExit
 	{
 		margin-right: -70px;
 		justify-content: flex-end;
-
 	}
 }
 .category_name_color 
