@@ -27,7 +27,12 @@
 }
 .account-form:hover 
 {
+width: 150px; 
+
 	border: 4px double #8B0000; 
+border: 4px double #FFCCCC; 
+	padding: 1em 1em 2em; 
+
 	border-radius: 0em 0em 0em 2em;
 	padding: 1em 1em 2em; 
 	text-align:center; 

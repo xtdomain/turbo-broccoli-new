@@ -139,8 +139,8 @@ $deleteButton = "<form action='' method='post'><input name='deleteLine' type='su
         <div class='DivVisual'>
           <h1 align='center'>Номер: <input name='id' class='numberSize' type='text' value='$value[idB]' class='tables'; /><input name='id2' type='hidden' value='$value[idB]' ; /></h1>
           <hr>
-          <div style='position: relative; vertical-align: middle;'><p>Название категории: <select name='category'>{$List($simple_category_table, nameCat, $value['id_category'])}</select><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='deleteCategory' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
-          <div style='position: relative; vertical-align: middle;'><p>Название товара: <select name='goods'>{$List($simple_goods_table, name, $value['id_goods'])}</select><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='deleteGood' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
+          <div style='position: relative; vertical-align: middle;'><p>Название категории: <select name='category'>{$List($simple_category_table, nameCat, $value['id_category'])}</select><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='deleteCategory' title='Удалить из списка' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
+          <div style='position: relative; vertical-align: middle;'><p>Название товара: <select name='goods'>{$List($simple_goods_table, name, $value['id_goods'])}</select><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='deleteGood' title='Удалить из списка' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
 <p align='center' style='color:gold;'><label>Сохранить параметры</label><input class='checkbox' type='checkbox' name='checkbox' checked='checked' value='1'/><span></span></p>
           <p>Активность категории: <select name='activity'>{$List($simple_category_table, activity, $value['activity'])}</select></p>
           <p>Активность товара: <select name='activityG'>{$List($simple_goods_table, activityG, $value['activityG'])}</select></p>
@@ -149,7 +149,7 @@ $deleteButton = "<form action='' method='post'><input name='deleteLine' type='su
           <p>Кол-во на складе: <input name='quantity' type='text' value='$value[quantity]' class='tables';/></p>
           <p>Возможность заказа: <input name='disposal' type='text' value='$value[disposal]'class='tables';/></p>
           <hr>
-          <div style='position: relative; vertical-align: middle;'><p class='buttonHolder'><input name='update' type='submit' value='Изменить' /><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='delete' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
+          <div style='position: relative; vertical-align: middle;'><p class='buttonHolder'><input name='update' type='submit' value='Изменить' /><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='delete' title='Удалить' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
         </div>
         <hr class='group_linie'>
       </form>";
@@ -158,7 +158,7 @@ $deleteButton = "<form action='' method='post'><input name='deleteLine' type='su
     if((($value == end(static::$result)) && ($this->pagesNumber() == Model::$countPage)) || empty(static::$result)) // ВАЖНО!!! ($this->pagesNumber() == Model::$countPage) убрать если нет пагинации
     {/////////////////////////////////
       $one = $value['idB'] +1;
-  
+
       $massiv[$key] .=
       "<form action='' method='post'>
       <hr class='group_linie'>
@@ -196,6 +196,7 @@ $deleteButton = "<form action='' method='post'><input name='deleteLine' type='su
 
         $idB = $_POST['id'];
 $idB_hidden = $_POST['id2'];
+
       //$idGood = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idG'];
       //$idCat = self::goods_table(0, 0, 'ALL')[$_POST['id']]['idCat'];
       $nameCat = $_POST['category'];
@@ -239,7 +240,7 @@ $stmt = $db->prepare($sql);
   if ($_POST['checkbox'] == 1)//добавить новый товар в новую категорию, но сохранить их параметры.
   {
 
-    if ( $_POST['id'] == self::goods_table(0, 1, ALL, 'idB')[$_POST['id']]['idB'] ) //проверка на изменение номера строки на уже существующий в таблице
+    if ( $_POST['id'] == self::goods_table(0, 1, ALL, 'idB')[$_POST['id']]['idB'] && $idB_hidden !== $idB) //проверка на изменение номера строки на уже существующий в таблице
     {
 Route::CallErrors();
     }
@@ -257,7 +258,7 @@ $stmt->bindParam(':idB_hidden_bind', $idB_hidden, PDO::PARAM_STR);
 
   else //добавить новый товар в новую категорию и изменить их параметры.
   {
-    if ( $_POST['id'] == self::goods_table(0, 1, ALL, 'idB')[$_POST['id']]['idB'] ) //проверка на изменение номера строки на уже существующий в таблице
+    if ( $_POST['id'] == self::goods_table(0, 1, ALL, 'idB')[$_POST['id']]['idB'] && $idB_hidden !== $idB) //проверка на изменение номера строки на уже существующий в таблице
     {
   Route::CallErrors();
     }
