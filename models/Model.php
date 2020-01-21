@@ -326,7 +326,8 @@ public function createSortButton($buttonName)
     $s = '&#9660';
     }
   }
-
+if ($this->count($id = static::$id, $whereName = static::$whereName)>1) {
+  
   $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
   $form = "
   <div class='pagination'>
@@ -336,6 +337,7 @@ public function createSortButton($buttonName)
     </form>
   </div>";
   return $form;
+}
   }
 }
 ?>

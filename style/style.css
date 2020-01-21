@@ -24,7 +24,7 @@
 	background:#DEB887; 
 	transition: .3s;
 }
-input:checked +label +br +br +span 
+input:checked +span 
 {
 	position: relative;
 	opacity: 0.7;
@@ -37,7 +37,7 @@ input:checked +label +br +br +span
 }
 .input-group-user
 {
-	padding: 0.5em;
+	padding: 0.55em;
 }
 .input-group
 {
@@ -47,6 +47,10 @@ input:checked +label +br +br +span
 {
 	padding-top: 0.1em;
 }
+.checkbox {
+ width:20px; height:20px;vertical-align:middle;
+}
+
 .for-submit 
 {
 
@@ -70,7 +74,7 @@ input:checked +label +br +br +span
 }
 .logo-form
 {
-text-align:left; position: fixed; background:#99CCFF; height: 3em; z-index: 2;
+padding-left: 4em; text-align:left; position: absolute; left: 0em; top: 0em; right: 0em; background:#FFCCCC; height: 3em; z-index: 2;animation: 1s ease slideInFromLeft;
 }
 .content 
 {
@@ -124,6 +128,7 @@ width:200px;
 footer 
 {
 	padding-right: 1em;
+padding-left: 1em;
 	text-align:right; 
 	position: fixed; 
 	left: 0em; 
@@ -221,7 +226,7 @@ footer
  	display: flex;
 	flex-flow: row wrap;
   	align-items: flex-start;
-  	justify-content: center;
+  	justify-content: flex-start;
 	position: relative; 
 }
 @media (max-width: 1428px){

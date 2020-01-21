@@ -1,6 +1,6 @@
-<div style="	padding-top: 2em; padding-bottom: 2em;">
+<div style="	padding-top: 2em; padding-bottom: 2em; ">
 	<h3 style="text-align:center">Категории</h3>
-	<div class="admin-table" >
+	<div class="admin-table">
 	<?php
 	echo($pageData['printDiv']);
 	?>

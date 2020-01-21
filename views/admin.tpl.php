@@ -40,9 +40,7 @@ $content->addRoute();
 		</div>
 	</div>
 	<footer>
-		<div class="footer" style="padding-right: 1em;text-align:right; position: fixed; left: 0em; bottom: 0em; right: 0em; background:#D3D3D3; height: 3em">
-			<p>Официальный магазин электроники</p>
-		</div>
+			<p style='float: left'>© Copyright Фалежинский Дмитрий Андреевич 2020 </p><p>Официальный магазин электроники</p>
 	</footer>
 </body>
 </html>

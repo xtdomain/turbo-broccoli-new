@@ -37,6 +37,7 @@
 	transition: .3s;
 }
 
+
 input:checked +span 
 {
 
@@ -58,7 +59,7 @@ input:checked +span
 .for-submit 
 {
 
-	padding-top: 1em;
+	padding-top: 1.2em;
 	padding-bottom: 0em;
 }
 .info 
@@ -130,6 +131,7 @@ width:200px;
 footer 
 {
 	padding-right: 1em;
+padding-left: 1em;
 	text-align:right; 
 	position: fixed; 
 	left: 0em; 
@@ -227,7 +229,7 @@ footer
  	display: flex;
 	flex-flow: row wrap;
   	align-items: flex-start;
-  	justify-content: flex-start;
+  	justify-content: center;
 	position: relative; 
 }
 @media (max-width: 1428px){

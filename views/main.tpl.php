@@ -51,7 +51,7 @@ $content->addRoute();
 
 	</div>
 	<footer>
-		<p>Официальный магазин электроники</p>
+		<p style='float: left'>© Copyright Фалежинский Дмитрий Андреевич 2020 </p><p>Официальный магазин электроники</p>
 	</footer>
 </body>
 </html>

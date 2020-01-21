@@ -150,15 +150,15 @@ $deleteButton = "<form action='' method='post'><input name='deleteLine' type='su
           <p>Возможность заказа: <input name='disposal' type='text' value='$value[disposal]'class='tables';/></p>
           <hr>
           <div style='position: relative; vertical-align: middle;'><p class='buttonHolder'><input name='update' type='submit' value='Изменить' /><span style='margin:10px;'><img src='/images/TRASH.png' style='height:22px;  margin-top: 2px; margin-right: 2px; margin-left: -2px; position: absolute;'><input name='delete' type='submit' value=' ' style='background: #CCCCFF; height:22px; vertical-align:middle; opacity:0.5;' /></span></div></p>
-
         </div>
         <hr class='group_linie'>
       </form>";
     }
     //print_r($this->pagesNumber());
-    if(($value == end(static::$result)) && ($this->pagesNumber() == Model::$countPage)) // ВАЖНО!!! ($this->pagesNumber() == Model::$countPage) убрать если нет пагинации
+    if((($value == end(static::$result)) && ($this->pagesNumber() == Model::$countPage)) || empty(static::$result)) // ВАЖНО!!! ($this->pagesNumber() == Model::$countPage) убрать если нет пагинации
     {/////////////////////////////////
       $one = $value['idB'] +1;
+  
       $massiv[$key] .=
       "<form action='' method='post'>
       <hr class='group_linie'>
@@ -175,7 +175,6 @@ $deleteButton = "<form action='' method='post'><input name='deleteLine' type='su
           <p>Кол-во на складе: <input name='quantity2' type='text' value='' class='tables'; /></p>
           <p>Возможность заказа: <input name='disposal2' type='text' value='' class='tables'; /></p>
           <hr>
-
           <p class='buttonHolder'><input name='add' type='submit' value='Добавить' style='background: #CCCCFF; height:20px; vertical-align:middle;' /></p>
         </div>
         <hr class='group_linie'>
@@ -224,13 +223,13 @@ $stmt = $db->prepare($sql);
 
 
 
-  $sql = "DELETE goods FROM goods INNER JOIN base on base.id_goods = goods.name WHERE base.id_goods=:nameG_bind;";
+  $sql = "DELETE goods FROM goods WHERE name=:nameG_bind;";
   $stmt = $db->prepare($sql);
       $stmt->bindParam(':nameG_bind', $nameGood, PDO::PARAM_STR);
 
 } else if (isset($_POST['deleteCategory'])) {
 
-  $sql = "DELETE category FROM category INNER JOIN base on base.id_category = category.nameCat WHERE base.id_category=:name_bind;";
+  $sql = "DELETE category FROM category WHERE nameCat=:name_bind;";
   $stmt = $db->prepare($sql);
       $stmt->bindParam(':name_bind', $nameCat, PDO::PARAM_STR);
 } else {
@@ -325,11 +324,9 @@ $stmt->bindParam(':idB_hidden_bind', $idB_hidden, PDO::PARAM_STR);
       $sql = "INSERT INTO `goods`(`idG`, `name`, `activityG`, `short_description`, `full_description`, `quantity`, `disposal`)
       VALUES (@idG:=:nameidG_bind, @new:=:nameG_bind, @act:=:nameActG_bind, @sd:=:nameShDisc_bind, @fd:=:nameFlDisc_bind, @quant:=:nameQuant_bind, @disp:=:nameDisp_bind)
       ON DUPLICATE KEY UPDATE $goodsParameter
-
       INSERT INTO `category`(`idCat`, `nameCat`, `activity`)
       VALUES (@idCat:=:nameidCat_bind, @newC:=:name_bind, @actC:=:nameAct_bind)
       ON DUPLICATE KEY UPDATE $categoryParameter
-
       INSERT INTO `base`(`idB`, `id_category`, `id_goods`) VALUES (@idBase:=:id_bind, @newC:=:name_bind, @new:=:nameG_bind);";
       $stmt = $db->prepare($sql);
       $stmt->bindParam(':id_bind', $idB, PDO::PARAM_STR);
