@@ -1,4 +1,5 @@
 <?php
+session_start();
 class tableModel extends Model {
     public static $countPage;
   public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
@@ -8,7 +9,8 @@ public static $result2;
 
   public function goods_tables()
   {
-                                              //создать запрос в базу данных 1. указать группировку(например 'name' из таблицы товаров) 2. указать LIMIT: 0 - показывать все, 1 - постранично
+
+                                           //создать запрос в базу данных 1. указать группировку(например 'name' из таблицы товаров) 2. указать LIMIT: 0 - показывать все, 1 - постранично
     $result = self::goods_table(name, 0, 0); //3. указать дополнительное ограничение where - товары только этой категории, где 0 - отключить, а любой текст соответствует наименованию категории
 self::$result = $result;
     return $result;
@@ -52,7 +54,7 @@ self::$result = $result;
             {
               $massiv[$key] .= "
               <li>
-                <form name='myForm' method='post' action='{$this->onlyTemplate()}/goods/1'>
+                <form name='myForm' method='post' action='{$this->onlyTemplate()}/goods/selected_category'>
                   <input type='submit' name='myForm' value='$value2[nameCat]'>
                 </form>
               </li>";
@@ -98,7 +100,7 @@ self::$result = $result;
             {
               $massiv[$key] .= "
 
-                <form name='myForm' method='post' action='{$this->onlyTemplate()}/goods/1'>
+                <form name='myForm' method='post' action='{$this->onlyTemplate()}/goods/selected_category'>
                   <input type='submit' name='myForm' value='$value2[nameCat]'>
                 </form>
               ";

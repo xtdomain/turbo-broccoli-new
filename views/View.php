@@ -15,6 +15,7 @@ class View {
     $i = count(static::$pageData)-1;
     while($i > 0)
     {
+        $pageData['save'] = Model::$actions;
       $pageData = static::$pageData[$i];
       include_once ROOT. static::$tpl[$i];
       $i--;

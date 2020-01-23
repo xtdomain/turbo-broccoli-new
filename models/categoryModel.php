@@ -39,6 +39,7 @@ class categoryModel extends Model {
 
   public function printDiv()
   {
+  
     $massiv = [];
     foreach(static::$result as $key => $value)
     {

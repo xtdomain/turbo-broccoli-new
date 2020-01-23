@@ -78,6 +78,10 @@ class Route {
           }
           if(!is_file(CONTROLLERS. ucfirst($route[$i+1]) . "Controller.php")) //если контроллер найден, то за ним должно быть действие
           {
+            if(!is_file(CONTROLLERS. ucfirst($route[$i+2]) . "Controller.php")) //если действие есть, значит за ним снова должно быть контроллер
+            {
+              Route::CallErrors();
+            }
             if (!is_numeric($route[$i+1]))
             { //действие - метод
               $action = $route[$i+1];

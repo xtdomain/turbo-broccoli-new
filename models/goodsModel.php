@@ -1,43 +1,40 @@
 <?php
+session_start();
 class goodsModel extends Model {
 
   public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
 //public static $whereName; //хранит имя поля группировки - для того чтобы после фильтра показывать только записи конкретной категории (+корректная пагинация)
   public $maxNotes = 2; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
-public static $result;
-public static $result2;
-  public function goods_tables() //$m - автоматически подставляет выбраную категорию, $p для автоматизации: в товарах есть пагинация, но после фильтра пагинации не будет
-  {
-    if (!empty($_POST['button']))
+  public static $result;
+  public static $result2;
+
+  public function goods_tables_selected_category() //отдельный метод для сессии - после выбора категории отображаются только товары категории,
+  { //однако на главной странице сессия не нужна, поэтому там вызывается следующий метод (см. ниже)
+    if (isset($_POST['myForm']))
     {
+      $_SESSION['myForm'] = $_POST['myForm'];
       $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       header("Location: $url");
     }
-    if (empty($_POST['myForm']))
-    {
-      $p = 1;
-      $m = 0;
-    }
-    else
-    {
-      $m = $_POST[myForm];
-      $p = 0;
-    }
-    $result = self::goods_table(name, $p, $m, 'num', 'hiddenSortButton');
+    $m = $_SESSION['myForm'];
+    $p = 0;
+    $result = self::goods_table(name, $p, $m, 'num', 'hiddenSortButtonSelected');
     self::$result = $result;
+    return $result;
+  }
+
+  public function goods_tables() //$m - автоматически подставляет выбраную категорию, $p для автоматизации: в товарах есть пагинация, но после фильтра пагинации не будет
+  {
+    $p = 1;
+    $m = 0;
+    $result = self::goods_table(name, $p, $m, 'num', 'hiddenSortButton'); // 1) группировка по name (наименование товара); 2) еслы выбрана категория - отключить пагинацию;
+    self::$result = $result; // 3) ограничение where - где категория равна $_POST['myForm'] 4) использовать кнопку сортировки и дать ей имя 'hiddenSortButton';
     return $result;
   }
 
   public function goods_tables2() //Дополнительный запрос в БД - нужен для 1) красивой нумерации таблиц, всегда по порядку без пропуска цифр, от единицы 2) ограничения вывода информации после фильтра
   {
-    if (empty($_POST['myForm']))
-    {
-      $p = 1;
-    }
-    else
-    {
-      $p = 0;
-    }
+
     $result = self::goods_table(name, 0, 0, 'num', 'hiddenSortButton');
     self::$result2 = $result;
     return $result;
@@ -86,6 +83,7 @@ public static $result2;
 $massiv = [];
     foreach(static::$result as $key => $value)
       {
+        print_r(static::$controller2);
         $massiv[$key] = "
         <div>
         <hr class='group_linie'>

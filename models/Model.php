@@ -5,8 +5,8 @@ class Model {
   public static $id = 0; // на всякий случай - если в конкретной модели забыть указать $id (имя поля БД - нужно для пагинации)
   public static $whereName = 0;
   public static $actions; //получить из роутера наименование текущего контроллера
-  public static $controller;
-
+  public static $controller;//получить из роутера наименование текущего шаблона
+  public static $controller2;//получить из роутера наименование текущего шаблона
   //public $maxNotes = 1;
   public $message = 'Войти';
   public $error = 'Неверный логин и/или пароль';
@@ -148,6 +148,7 @@ array_unshift($urlT, "");
 
   public function Pagination($name)
   {
+  static::$controller2=$name;
     $massiv = [];
     for ($i=1; $i<=$this->pagesNumber(); $i++) //опираясь на функцию вычисления количества страниц - эта функция содержит уже готовые ссылки
     {
@@ -305,39 +306,38 @@ array_unshift($urlT, "");
     }
     return $ASC;
   }
-
-public function createSortButton($buttonName)
-{
-  if (!empty($_SESSION[$buttonName]))
+  public function createSortButton($buttonName)
   {
-    $a = $_SESSION[$buttonName];
-    $s = '&#9650';
-    if ($a == 'DESC')
+    if (!empty($_SESSION[$buttonName]))
     {
-    $s = '&#9660';
+      $a = $_SESSION[$buttonName];
+      $s = '&#9650';
+      if ($a == 'DESC')
+      {
+      $s = '&#9660';
+      }
     }
-  }
-  else
-  {
-    $a = "ASC";
-    $s = '&#9650';
-    if ($a == 'DESC')
+    else
     {
-    $s = '&#9660';
+      $a = "ASC";
+      $s = '&#9650';
+      if ($a == 'DESC')
+      {
+      $s = '&#9660';
+      }
     }
-  }
-if ($this->count($id = static::$id, $whereName = static::$whereName)>1) {
-  
-  $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-  $form = "
-  <div class='pagination'>
-    <form name='sortButton' action='$url' method='post'>
-      <input type='hidden' name='$buttonName' value=$a />
-      <input name='sortButton' type='submit'  value='Сортировать $s' class='paginationPhp' style='color: #8B0000; background: #DEB887; width:120px;'/>
-    </form>
-  </div>";
-  return $form;
-}
+    if ($this->count($id = static::$id, $whereName = static::$whereName)>1) //Новое условие - кнопка сортировки появится при наличии хотя бы 2-х записей
+    {
+      $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+      $form = "
+        <div class='pagination'>
+          <form name='sortButton' action='$url' method='post'>
+            <input type='hidden' name='$buttonName' value=$a />
+            <input name='sortButton' type='submit'  value='Сортировать $s' class='paginationPhp' style='color: #8B0000; background: #DEB887; width:120px;'/>
+          </form>
+        </div>";
+      return $form;
+    }
   }
 }
 ?>
