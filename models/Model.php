@@ -3,10 +3,11 @@ class Model {
   public static $countPage = 1;
   public static $pagesNumber = 1;
   public static $id = 0; // на всякий случай - если в конкретной модели забыть указать $id (имя поля БД - нужно для пагинации)
-  public static $whereName = 0;
+
   public static $actions; //получить из роутера наименование текущего контроллера
   public static $controller;//получить из роутера наименование текущего шаблона
   public static $controller2;//получить из роутера наименование текущего шаблона
+  public static $getModelName = array();
   //public $maxNotes = 1;
   public $message = 'Войти';
   public $error = 'Неверный логин и/или пароль';
@@ -17,6 +18,19 @@ class Model {
       return $implodeMassiv;
     }
   }
+
+  static public function getModelName()
+  {
+  $getClass = get_called_class();
+  array_push(static::$getModelName, $getClass); //добавить в массив все контроллеры
+  foreach (static::$getModelName as $key => $value) {
+    $str = substr($value,0,-5);
+    print_r($value);
+    return $str;
+  }
+
+}
+
 
   public static function saveUrlBefore()
   {
@@ -111,16 +125,11 @@ array_unshift($urlT, "");
     $this->db = dataBase::DB_connection();
   }
 
-  public function count($id, $whereName, $limit = "WHERE goods.activityG='1' AND category.activity='1'") //стандартно записи лимитированы по активности
+  public function count($id, $limit = "WHERE goods.activityG='1' AND category.activity='1'") //стандартно записи лимитированы по активности
   { //Посчитать количество записей в БД для пагинации
-    if ($whereName != '0')
-    {
-      $where = "AND nameCat = '$whereName'";
-    }
-    else
-    {
+
       $where = '';
-    }
+
     $sql = "SELECT COUNT(DISTINCT $id) AS qty
     FROM base
     INNER JOIN category on base.id_category = category.nameCat
@@ -133,21 +142,34 @@ array_unshift($urlT, "");
     return $res;
   }
 
-  public function  pagesNumber() //количество страниц
+  public function pagesNumber() //количество страниц
   {
-    if ($this->maxNotes > 0) {
-    $pagesNumber = ceil($this->count($id = static::$id, $whereName = static::$whereName)/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
-  }
-  else
-  {
-  Route::CallErrors(); //деление на 0
-  }
+    $route = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    if ($this->maxNotes > 0)
+    {
 
+      if ($route[1] != 'admin') { //если в стандартной части - НЕ считать записи среди неактивных товаров и категорий
+        $pagesNumber = ceil($this->count($id = static::$id)/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
+      }
+      else
+      { //если в админской части - считать записи среди неактивных товаров и категорий
+        $pagesNumber = ceil($this->count($id = static::$id, "WHERE goods.activityG='1' OR category.activity='0' OR goods.activityG='0' AND category.activity='1'")/$this->maxNotes);
+      }
+    }
+    else
+    {
+      Route::CallErrors(); //деление на 0
+    }
     return $pagesNumber;
   }
 
-  public function Pagination($name)
+  public function Pagination()
   {
+  $getClass = get_called_class();
+    $str = substr($getClass,0,-5);
+    $name =   $str;
+
+
   static::$controller2=$name;
     $massiv = [];
     for ($i=1; $i<=$this->pagesNumber(); $i++) //опираясь на функцию вычисления количества страниц - эта функция содержит уже готовые ссылки
@@ -226,9 +248,22 @@ array_unshift($urlT, "");
       $maxNotes = '';
     }
 
+    $route = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); //если в админской части - показывать даже неактивные товары и категории
+      if ($route[1] == 'admin') {
+        if ($where === 'ALL')
+        {
+          $whereName = "";
+        }
+        else if ($where != '0') {
+          $whereName = "WHERE nameCat = '$where'";
+        } else {
+          $whereName = "";
+        }
+  } else { //если в стандартной части - скрывать неактивные товары и категории
+
     if ($where === 'ALL')
     {
-      $whereName = "WHERE category.activity='0' OR goods.activityG='1' OR goods.activityG='0'";
+      $whereName = "WHERE category.activity='0' OR goods.activityG='1' OR goods.activityG='0' OR category.activity='1'";
     }
 
     else if ($where != '0')
@@ -239,6 +274,9 @@ array_unshift($urlT, "");
     {
       $whereName = "WHERE category.activity='1' AND goods.activityG='1'";
     }
+
+
+}
 
     if ($ASC != 'ASC' && $ASC != 'DESC')
     {
@@ -326,7 +364,7 @@ array_unshift($urlT, "");
       $s = '&#9660';
       }
     }
-    if ($this->count($id = static::$id, $whereName = static::$whereName)>1) //Новое условие - кнопка сортировки появится при наличии хотя бы 2-х записей
+    if ($this->count($id = static::$id)>1) //Новое условие - кнопка сортировки появится при наличии хотя бы 2-х записей
     {
       $url = (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
       $form = "

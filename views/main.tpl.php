@@ -1,5 +1,4 @@
 <?php
-$content->startRoute('default');
 $content->addRoute();
 ?>
 <!DOCTYPE html>

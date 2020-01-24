@@ -3,8 +3,8 @@ session_start();
 class goodsModel extends Model {
 
   public static $id = idG; //здесь указываем поле по которому считаем количество записей БД (нужно для пагинации)
-//public static $whereName; //хранит имя поля группировки - для того чтобы после фильтра показывать только записи конкретной категории (+корректная пагинация)
-  public $maxNotes = 2; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
+
+  public $maxNotes = 1; //отработать ошибки - если не показывать все товары - и использовать фильтр - товары могут отсутствовать!
   public static $result;
   public static $result2;
 
@@ -83,7 +83,7 @@ class goodsModel extends Model {
 $massiv = [];
     foreach(static::$result as $key => $value)
       {
-        print_r(static::$controller2);
+
         $massiv[$key] = "
         <div>
         <hr class='group_linie'>

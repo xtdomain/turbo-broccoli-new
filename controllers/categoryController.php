@@ -13,7 +13,7 @@ class categoryController extends Controller {
     $goods_table = $this->model->goods_tables();  // Подключение таблицы товаров из БД
     $this->pageData['goods_table'] = $goods_table;
 
-    $pagination = $this->model->Pagination('category'); // Подключение пагинации
+    $pagination = $this->model->Pagination(); // Подключение пагинации
     $this->pageData['pagination'] = $pagination;
 
     $printTable = $this->printArrays($this->model->printTable()); //вывод информации в табличном виде

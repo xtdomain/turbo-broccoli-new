@@ -1,5 +1,4 @@
 <?php
-$content->startRoute('admin');
 $content->addRoute();
 ?>
 <!DOCTYPE html>

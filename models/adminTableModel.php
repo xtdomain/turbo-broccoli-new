@@ -8,7 +8,7 @@ public static $result;
 public function  pagesNumber() //количество страниц (в этой таблице страниц больше - лимит убирается, тк нужно показывать даже неактивные категории и товары)
 {
   if ($this->maxNotes > 0) {
-  $pagesNumber = ceil($this->count($id = static::$id, $whereName = static::$whereName, $limit = "")/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
+  $pagesNumber = ceil($this->count($id = static::$id, $limit = "")/$this->maxNotes); //!!!обязательно позднее статическое связывание - чтобы взять параметр конкретной модели а не этой
 }
 else
 {
@@ -19,7 +19,7 @@ Route::CallErrors(); //деление на 0
 
   public function goods_tables($m) //$m - автоматически подставляет выбраную категорию, $p для автоматизации: в товарах есть пагинация, но после фильтра пагинации не будет
   {
-    self::$whereName = $m;
+
     if (empty($_POST['myForm']))
     {
       $p = 1;
@@ -100,8 +100,8 @@ Route::CallErrors(); //деление на 0
 
   public function printDiv()
   {
-      $simple_goods_table = self::goods_simple_table(goods, idG, 'name, short_description, full_description, disposal, quantity, activityG');
-      $simple_category_table = self::goods_simple_table(category, idCat, 'nameCat, activity');
+      $simple_goods_table = $this->goods_simple_table(goods, idG, 'name, short_description, full_description, disposal, quantity, activityG');
+      $simple_category_table = $this->goods_simple_table(category, idCat, 'nameCat, activity');
     $massiv = [];
     $List = function($nameField, $column, $selected)
     {

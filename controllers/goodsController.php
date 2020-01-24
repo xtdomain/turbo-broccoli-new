@@ -20,7 +20,8 @@ class goodsController extends Controller {
     $this->pageData['goods_table2'] = $goods_table2;
 
 
-    $pagination = $this->model->Pagination('goods'); // Подключение пагинации (после выбора категории пагинацию не отображать)
+    $pagination = $this->model->Pagination(); // Подключение пагинации (после выбора категории пагинацию не отображать)
+
     $this->pageData['pagination'] = $pagination;
 
     $printTable = $this->printArrays($this->model->printTable()); //вывод информации в табличном виде

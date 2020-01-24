@@ -6,22 +6,23 @@ class Route {
   public static function startRoute($name) //сохраняет имя шаблона (например default, admin)
   {
       Route::$templateName = $name;
+
   }
 
   public static function mainRoute()
   { //этот метод запускает стандартный контроллер, который в свою очередь вызывает шаблон, последний подключает роутер
     $firstRoute = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-    $base = "default";
-    $templateList = array("admin", "default");
+    $base = "default"; //указать стартовый шаблон
+    $templateList = array("admin", "default"); //указать список шаблонов
     foreach ($templateList as $key => $value)
     {
-      if ($firstRoute[1] == $value)
+      if ($firstRoute[1] == $value) //если на первом месте шаблон из списка
       {
         $controllerName = $value . "Controller";
         $modelName = $value . "Model";
         Route::startController($controllerName, $modelName, "default");
       }
-      else
+      else //иначе запустить стартовый шаблон
       {
         $controllerName = $base . "Controller";
         $modelName = $base . "Model";
@@ -36,6 +37,7 @@ class Route {
     require_once MODELS . $modelName. ".php";
     $controller = new $controllerName();
     $controller->infos(self::$save, self::$templateName); //передать имена контроллеров в контроллер (перехват из save - и передача в основной контроллер - критически важный параметр)
+
     if (method_exists($controllerName, $action))
     {
       $controller->$action();
